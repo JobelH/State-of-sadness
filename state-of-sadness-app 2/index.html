@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3E2518">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500;1,700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<title>State of Sadness — A Classic Book Companion</title>
+<style>
+:root {
+  --site-primary: #6F252E;
+  --site-on-primary: #FFF8F0;
+  --site-secondary: #D8C4A7;
+  --site-on-secondary: #29201D;
+  --site-background: #F3EEE7;
+  --site-on-background: #272320;
+  --site-font-body: Georgia, 'Times New Roman', serif;
+  --site-font-heading: Georgia, 'Times New Roman', serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  color-scheme: light dark;
+}
+* { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { background: #6F252E; }
+#app { background-clip: padding-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { min-height: 100vh; width: 100%; background-color: light-dark(var(--site-background), #191715); color: light-dark(var(--site-on-background), #F1EAE1); overflow: hidden; }
+.hero { background: var(--site-primary); color: var(--site-on-primary); padding: calc(36px * var(--site-spacing-scale)) max(22px, calc((100vw - 920px)/2)); position: relative; overflow: hidden; }
+.hero:after { content: '❧'; position: absolute; right: 6%; bottom: -70px; font-size: 230px; line-height: 1; opacity: calc(.11 * var(--site-decoration-opacity)); transform: rotate(-22deg); pointer-events:none; }
+.eyebrow { font: 700 11px/1.5 system-ui,sans-serif; letter-spacing: .22em; text-transform: uppercase; opacity: .78; }
+h1 { font-size: clamp(36px, 6vw, 62px); line-height: .98; font-weight: 500; letter-spacing: -.045em; max-width: 660px; margin: 16px 0 14px; }
+.hero p { font-size: 17px; line-height: 1.55; max-width: 560px; margin: 0; color: #F2DFD5; }
+main { max-width: 920px; margin: 0 auto; padding: 30px 22px 52px; }
+.intro { font-size: 18px; line-height: 1.55; margin: 0 0 24px; max-width: 680px; }
+.section-label { font: 700 11px/1.4 system-ui,sans-serif; letter-spacing: .16em; text-transform: uppercase; opacity: .7; margin: 25px 0 12px; }
+.moods { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.mood { font-family: inherit; text-align: left; border: 1px solid light-dark(#D6C9BC,#514943); border-radius: calc(12px * var(--site-radius-scale)); padding: 15px 15px 14px; background: light-dark(#FAF7F2,#26221F); color: inherit; cursor: pointer; transition: border-color .15s, transform .15s, background .15s; min-height: 91px; }
+.mood:hover { transform: translateY(-1px); border-color: var(--site-primary); }
+.mood[aria-pressed="true"] { border: 2px solid var(--site-primary); padding: 14px; background: light-dark(#F0E2DC,#3A2928); }
+.mood strong { display: block; font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+.mood span { display: block; font: 12px/1.45 system-ui,sans-serif; opacity: .75; }
+.intensity-wrap { margin-top: 23px; padding: 18px 18px 16px; border-radius: calc(14px * var(--site-radius-scale)); background: light-dark(#E8DED2,#282320); }
+.intensity-head { display:flex; align-items:baseline; justify-content:space-between; gap: 12px; }
+.intensity-head label { font-size: 17px; }
+#intensityValue { font: 700 12px system-ui,sans-serif; color: var(--site-primary); }
+input[type=range] { width:100%; accent-color: var(--site-primary); margin: 18px 0 7px; cursor:pointer; }
+.range-labels { display:flex; justify-content:space-between; font: 11px system-ui,sans-serif; opacity:.7; }
+select, button { font: inherit; }
+.actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 18px; }
+.primary-btn,.secondary-btn { min-height: 46px; border-radius: 999px; padding: 12px 19px; cursor:pointer; }
+.primary-btn { background: var(--site-primary); color: var(--site-on-primary); border:1px solid var(--site-primary); }
+.secondary-btn { background: transparent; color: inherit; border:1px solid light-dark(#BEB0A2,#635750); }
+.primary-btn:hover { filter:brightness(1.08); }
+.result { display:none; margin-top:30px; }
+.result.visible { display:block; animation: rise .3s ease-out; }
+@keyframes rise { from {opacity:0; transform:translateY(7px)} to {opacity:1; transform:translateY(0)} }
+.result-top { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+.result-top .rule { height:1px; background: light-dark(#D3C4B5,#514943); flex:1; }
+.result-top span { font:700 11px system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; opacity:.72; }
+.book-card { background: light-dark(#FFFCF7,#24201D); border:1px solid light-dark(#DED2C6,#4A403A); border-radius: calc(18px * var(--site-radius-scale)); overflow:hidden; display:grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr); }
+.book-art { min-height: 270px; background:#292421; display:flex; align-items:center; justify-content:center; padding:24px; position:relative; overflow:hidden; }
+.book-cover { width:min(100%,205px); aspect-ratio: .67; padding:20px 16px; display:flex; flex-direction:column; justify-content:space-between; color:#F8EBDD; background:linear-gradient(155deg,#722D36,#321C24 78%); box-shadow:12px 13px 24px #0005; border:1px solid #D9BFA2; position:relative; z-index:1; }
+.book-cover:before { content:''; position:absolute; inset:8px; border:1px solid #D9BFA2A0; pointer-events:none; }
+.cover-kicker { font: 9px system-ui,sans-serif; letter-spacing:.2em; text-transform:uppercase; text-align:center; }
+.cover-symbol { font-size:43px; text-align:center; opacity:.86; }
+.cover-title { font-size:clamp(20px,3vw,27px); line-height:1.02; text-align:center; overflow-wrap:anywhere; }
+.cover-author { font:10px system-ui,sans-serif; letter-spacing:.1em; text-align:center; text-transform:uppercase; }
+.book-copy { padding:26px; }
+.match-label { color:var(--site-primary); font:700 10px system-ui,sans-serif; letter-spacing:.17em; text-transform:uppercase; }
+.book-copy h2 { font-size:clamp(26px,4vw,38px); line-height:1.03; font-weight:500; margin:9px 0 5px; letter-spacing:-.025em; }
+.author { font-style:italic; opacity:.75; margin-bottom:17px; }
+.why { font-size:16px; line-height:1.6; }
+.quote { font-style:italic; font-size:17px; line-height:1.5; border-left:2px solid var(--site-secondary); padding-left:14px; margin:20px 0; }
+.meta { font:12px/1.6 system-ui,sans-serif; opacity:.75; }
+.reading-note { background:light-dark(#E8DED2,#302924); padding:17px 19px; border-radius: calc(12px * var(--site-radius-scale)); margin-top:13px; font-size:14px; line-height:1.55; }
+.reading-note strong { display:block; margin-bottom:4px; }
+.other-picks { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:12px; }
+.pick { padding:15px; border:1px solid light-dark(#DED2C6,#4A403A); border-radius:calc(12px * var(--site-radius-scale)); background:light-dark(#FAF7F2,#24201D); }
+.pick h3 { margin:0 0 4px; font-size:17px; font-weight:500; }
+.pick p { font-size:13px; line-height:1.5; opacity:.8; margin:0; }
+.footnote { margin-top:25px; font:12px/1.55 system-ui,sans-serif; opacity:.68; }
+.preferences { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:18px; }
+.preference { display:flex; flex-direction:column; gap:8px; font:12px/1.4 system-ui,sans-serif; }
+.preference select { width:100%; min-height:44px; padding:10px 12px; border:1px solid light-dark(#BEB0A2,#635750); border-radius:10px; background:light-dark(#FAF7F2,#26221F); color:inherit; }
+.selection-hint { font:12px/1.45 system-ui,sans-serif; opacity:.7; margin:9px 0 0; }
+.shelf { margin-top:32px; padding-top:22px; border-top:1px solid light-dark(#D3C4B5,#514943); }
+.shelf-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.shelf h2 { font-size:27px; font-weight:500; margin:0 0 5px; }
+.shelf-intro,.empty-shelf { font:13px/1.5 system-ui,sans-serif; opacity:.72; }
+.shelf-list { display:grid; gap:10px; margin-top:14px; }
+.shelf-entry { border:1px solid light-dark(#DED2C6,#4A403A); border-radius:12px; padding:15px; background:light-dark(#FAF7F2,#24201D); }
+.shelf-entry-top { display:flex; justify-content:space-between; gap:12px; align-items:start; }
+.shelf-entry h3 { margin:0 0 4px; font-size:18px; font-weight:500; }
+.shelf-entry p { margin:0 0 10px; font:12px/1.5 system-ui,sans-serif; opacity:.75; }
+.shelf-entry label { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font:12px system-ui,sans-serif; }
+.shelf-entry select { padding:7px; border:1px solid light-dark(#BEB0A2,#635750); border-radius:8px; background:light-dark(#FFFCF7,#24201D); color:inherit; }
+.remove-book { border:0; background:transparent; color:inherit; text-decoration:underline; cursor:pointer; font:12px system-ui,sans-serif; padding:4px; }
+@media(max-width:600px) { .hero { padding:29px 22px 34px; } main {padding:24px 16px 38px;} .moods {grid-template-columns:1fr 1fr; gap:8px;} .mood {padding:12px; min-height:96px;} .mood strong {font-size:15px;} .book-card {grid-template-columns:1fr;} .book-art {min-height:235px;} .book-cover {width:145px;} .book-copy {padding:21px;} .other-picks {grid-template-columns:1fr;} .hero:after {right:-20px;font-size:180px;} .preferences {grid-template-columns:1fr;} .shelf-heading {align-items:start; flex-direction:column;} }
+@media(prefers-reduced-motion:reduce) { *,*:before,*:after {animation:none!important;transition:none!important;scroll-behavior:auto!important;} }
+
+/* ===== Library café theme ===== */
+:root{--site-primary:#4A2E1F;--site-on-primary:#FBF3E4;--site-secondary:#C49A55;--site-on-secondary:#2B1E16;--site-background:#F3E9D8;--site-on-background:#2B1E16;
+--site-font-body:'Lora',Georgia,'Times New Roman',serif;--site-font-heading:'Cormorant Garamond','Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;--brass:#B8893C;--wood:#3E2518;}
+body{background:#3E2518;}
+#app{background-color:light-dark(var(--site-background),#1E1510);background-image:radial-gradient(rgba(120,80,40,.07) 1px,transparent 1px);background-size:5px 5px;}
+h1,h2,h3,.cover-title,.book-copy h2,.shelf h2,.pick h3,.mood strong,.shelf-entry h3{font-family:var(--site-font-heading);}
+h1{font-style:italic;font-weight:700;letter-spacing:-.02em;font-size:clamp(44px,8vw,72px);}
+.hero{background:radial-gradient(circle at 88% 18%,rgba(232,178,92,.34),transparent 38%),repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 2px,transparent 2px 9px),linear-gradient(180deg,#4A2E1F,#35200F);color:#FBF3E4;padding-bottom:calc(46px * var(--site-spacing-scale));}
+.hero p{color:#EBD8BC;font-style:italic;}
+.hero:after{content:'☕';font-size:210px;opacity:.1;right:5%;bottom:-48px;transform:rotate(-12deg);}
+.eyebrow{font-family:var(--site-font-heading);font-size:14px;font-weight:700;letter-spacing:.2em;color:#E8C487;opacity:1;}
+main:before{content:'';display:block;height:30px;margin:-30px -22px 26px;border-bottom:7px solid #2E1B10;box-shadow:0 3px 0 #B8893C;background:linear-gradient(90deg,#7A3B2E 0 13px,#2F4A3A 13px 23px,#C49A55 23px 29px,#5A3825 29px 44px,#8C5A3C 44px 50px,#34495E 50px 63px,#9A6B3E 63px 70px,#4F2A2A 70px 84px,#3F5D45 84px 91px,#B58B52 91px 104px) 0 0/104px 100% repeat-x;}
+.section-label{display:flex;align-items:center;gap:10px;font-family:var(--site-font-heading);font-size:14px;letter-spacing:.14em;opacity:.85;color:light-dark(#6B4A2E,#D9B87E);}
+.section-label:after{content:'';flex:1;border-bottom:1px dotted currentColor;opacity:.5;}
+.mood{background:light-dark(#FBF4E6,#2A1E16);border:1px solid light-dark(#CDB48C,#5A4430);box-shadow:inset 0 0 0 3px light-dark(#FBF4E6,#2A1E16),inset 0 0 0 4px light-dark(#E3D2B3,#4A3828);}
+.mood:hover{border-color:var(--brass);}
+.mood[aria-pressed="true"]{background:light-dark(#F1DFC0,#43301F);border:2px solid var(--brass);box-shadow:inset 0 0 0 3px light-dark(#F1DFC0,#43301F),inset 0 0 0 4px var(--brass);}
+.intensity-wrap,.reading-note{background:light-dark(#E9D9BB,#2C2016);border:1px solid light-dark(#D3BD94,#4A3828);}
+.primary-btn{background:linear-gradient(180deg,#5A3825,#3E2518);border:1px solid var(--brass);color:#FBF3E4;box-shadow:0 2px 0 #2A170C;letter-spacing:.02em;}
+.primary-btn:hover{filter:brightness(1.12);}
+.secondary-btn{border:1px solid light-dark(#B8893C,#8A6B3E);background:light-dark(rgba(255,250,240,.5),rgba(255,255,255,.03));}
+.pick,.shelf-entry,.preference select,.shelf-entry select{background:light-dark(#FBF4E6,#2A1E16);border-color:light-dark(#D3BD94,#4A3828);}
+.preference select{border:1px solid light-dark(#C9AE82,#5A4430);}
+.book-card{position:relative;background:light-dark(#FFFAF0,#261A12);border:1px solid light-dark(#CFB78A,#4A3828);box-shadow:0 10px 24px rgba(62,37,24,.18);}
+.book-card:before{content:'';position:absolute;top:0;right:24px;width:18px;height:50px;background:#8B2E2E;clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);z-index:3;}
+.book-art{background:radial-gradient(circle at 50% 40%,#4A3023,#2B1B12);}
+.match-label{color:light-dark(#8A5A22,#E0B76F);font-family:var(--site-font-heading);font-size:13px;}
+.quote{border-left:3px solid var(--brass);font-family:var(--site-font-heading);font-size:20px;}
+.shelf{border-top:2px dotted light-dark(#C9AE82,#5A4430);}
+.result-top .rule{background:light-dark(#CFB78A,#5A4430);}
+#support{border:1px dashed var(--brass);}
+a{color:inherit;}
+.range-labels,.meta{opacity:.8;}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="State of Sadness">
+</head>
+<body>
+<div id="app" data-sites-preview-theme="custom">
+  <header class="hero">
+    <div class="eyebrow">The Sorrow Library &amp; Café</div>
+    <h1>State of<br>Sadness.</h1>
+    <p>Pull up a chair by the window. Tell me where it hurts, and I’ll fetch you a classic book or film from anywhere in the world, like a pot of something warm.</p>
+  </header>
+  <main>
+    <p class="intro">Not every sadness needs fixing. Sometimes you need a book that understands the shape of it. Find your current emotional weather below.</p>
+    <div class="pick" id="dailyPick" style="margin-bottom:22px"><p class="meta" style="margin:0 0 6px">Today’s special</p><h3 id="dailyTitle"></h3><p id="dailyText"></p><button class="secondary-btn" id="dailyBtn" type="button" style="margin-top:10px">Show me today’s pick</button></div>
+    <div class="section-label">01 — What kind of sorrow is it?</div>
+    <div class="moods" role="group" aria-label="Choose your emotional state">
+      <button class="mood" data-mood="heartbreak" aria-pressed="true"><strong>Heartbroken</strong><span>Love, loss, the unsent message</span></button>
+      <button class="mood" data-mood="lonely" aria-pressed="false"><strong>Deeply lonely</strong><span>Surrounded by people, unseen</span></button>
+      <button class="mood" data-mood="wrecked" aria-pressed="false"><strong>Soul-wrecked</strong><span>Existential ache; nothing feels solid</span></button>
+      <button class="mood" data-mood="numb" aria-pressed="false"><strong>Numb & empty</strong><span>Going through the motions</span></button>
+      <button class="mood" data-mood="guilty" aria-pressed="false"><strong>Guilty & regretful</strong><span>Haunted by who I was or what I did</span></button>
+      <button class="mood" data-mood="tired" aria-pressed="false"><strong>Exhausted by life</strong><span>Too tired to hope, not ready to quit</span></button>
+    </div>
+    <p class="selection-hint" id="selectionHint">Choose up to three feelings that overlap today.</p>
+    <div class="preferences" aria-label="Reading preferences">
+      <label class="preference" for="readingLength">How much can you take on?
+        <select id="readingLength"><option value="any">Any reading length</option><option value="short">Short story or novella</option><option value="long">A long novel</option></select>
+      </label>
+      <label class="preference" for="emotionalDepth">What kind of emotional depth?
+        <select id="emotionalDepth"><option value="balanced">A balanced companion</option><option value="gentle">Gentle, tender, hopeful</option><option value="deep">Philosophical and introspective</option><option value="dark">Dark, intense, psychologically raw</option></select>
+      </label>
+      <label class="preference" for="regionFilter">Where in the world?
+        <select id="regionFilter"><option value="any">Anywhere in the world</option><option value="RU">Russia</option><option value="EU">Europe</option><option value="AM">The Americas</option><option value="EA">East Asia</option><option value="SA">South Asia</option><option value="SE">Southeast Asia</option><option value="ME">Middle East &amp; North Africa</option><option value="AF">Africa</option><option value="OC">Oceania</option></select>
+      </label>
+      <label class="preference" for="eraFilter">Which era?
+        <select id="eraFilter"><option value="any">Any era, ancient to today</option><option value="anc">Ancient (to 500 CE)</option><option value="med">Medieval (500–1500)</option><option value="early">1500–1799</option><option value="19">1800s</option><option value="mid20">1900–1945</option><option value="now">1946 to today</option></select>
+      </label>
+      <label class="preference" for="countryFilter">Which country?
+        <select id="countryFilter"><option value="any">Any country</option></select>
+      </label>
+      <label class="preference" for="typeFilter">What kind of writing?
+        <select id="typeFilter"><option value="any">Books and films</option><option value="books">Books only</option><option value="film">Films only (movies)</option><option value="fiction">Fiction prose (novels, stories)</option><option value="nonfiction">Nonfiction prose (essays, memoir, sayings)</option><option value="poetry">Poetry (poems, epigrams, haiku)</option><option value="drama">Drama (plays)</option></select>
+      </label>
+      <label class="preference" for="orderFilter">Which one first?
+        <select id="orderFilter"><option value="best">Best match for my mood</option><option value="oldest">Oldest first</option><option value="newest">Newest first</option></select>
+      </label>
+    </div>
+    <div class="intensity-wrap">
+      <div class="intensity-head"><label for="intensity">02 — How deep does it go today?</label><span id="intensityValue">7 / 10</span></div>
+      <input id="intensity" type="range" min="1" max="10" value="7" step="1" aria-label="Sadness intensity">
+      <div class="range-labels"><span>A little blue</span><span>Heavy-hearted</span><span>Devastated</span></div>
+      <div class="actions">
+        <button id="recommend" class="primary-btn">Fetch me something</button>
+        <button id="surprise" class="secondary-btn">Surprise me</button>
+      </div>
+    </div>
+    <section class="result" id="result" aria-live="polite">
+      <div class="result-top"><span>Fetched from the shelves for you</span><div class="rule"></div></div>
+      <div class="book-card">
+        <div class="book-art"><div class="book-cover" id="cover"><div class="cover-kicker">A book for the soul</div><div class="cover-symbol" id="symbol">✶</div><div class="cover-title" id="coverTitle">White Nights</div><div class="cover-author" id="coverAuthor">Fyodor Dostoevsky</div></div></div>
+        <div class="book-copy">
+          <div class="match-label" id="matchLabel">For a heart still reaching</div>
+          <h2 id="bookTitle">White Nights</h2>
+          <div class="author" id="author">Fyodor Dostoevsky · 1848</div>
+          <div class="why" id="why">A brief, tender encounter between two lonely people, and the fragile hope that being seen—even briefly—can change a life.</div>
+          <div class="quote" id="quote">“My God, a whole moment of happiness! Is that really too little for the whole of a human life?”</div>
+          <div class="meta" id="meta">Short read · wistful, intimate, quietly devastating</div>
+          <div class="actions"><button id="saveBook" class="secondary-btn" type="button">♡ Save to My Sorrow Shelf</button> <a id="findBook" class="secondary-btn" href="#" target="_blank" rel="noopener sponsored" style="text-decoration:none;display:inline-flex;align-items:center">Find this book ↗</a> <a id="amazonBook" class="secondary-btn" href="#" target="_blank" rel="noopener sponsored" style="text-decoration:none;display:inline-flex;align-items:center">Amazon ↗</a> <a id="watchBook" class="secondary-btn" href="#" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Search my channel ▶</a> <button id="shareBook" class="secondary-btn" type="button">Share this pick ↗</button> <a id="freeBook" class="secondary-btn" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none;align-items:center">Read free ↗</a></div><details id="freeBox" style="display:none;margin-top:12px;font:14px/1.7 system-ui,sans-serif"><summary id="freeSummary" style="cursor:pointer">Read or listen free</summary><div id="freeLinks" style="margin-top:6px"></div><p class="meta" style="margin:6px 0 0">Not every title is on every site. If one link has no match, try another.</p></details>
+<p class="meta" id="affNote" style="display:none;margin:10px 0 0">Some links are affiliate links; I may earn a small commission if you buy, at no extra cost to you.</p>
+        </div>
+      </div>
+      <div class="reading-note"><strong id="noteTitle">How to read this one</strong><span id="note">Read slowly, preferably at night. Let the story keep you company; you don't have to turn its sadness into a lesson.</span></div>
+      <div class="section-label">If this one doesn't quite meet you there</div>
+      <div class="other-picks" id="otherPicks"></div>
+      <p class="footnote">A companion, not a diagnosis. These are literary matches, not instructions to feel better. You can come back and choose a different kind of sorrow whenever it changes.</p>
+    </section>
+    <section class="shelf" id="sorrowShelf" aria-labelledby="shelfTitle">
+      <div class="shelf-heading"><div><h2 id="shelfTitle">My Sorrow Shelf</h2><p class="shelf-intro">Keep the books that met you where you were. Your shelf stays on this device.</p></div><span class="meta" id="shelfCount">0 books saved</span></div>
+      <div class="shelf-list" id="shelfList"><p class="empty-shelf">No books saved yet. When a recommendation speaks to you, keep it here.</p></div>
+    </section>
+  <section class="pick" id="support" style="margin-top:28px"><h3>If you’re struggling</h3><p>Books and films can keep you company, but they aren’t a substitute for a person. If you’re thinking about hurting yourself or you feel unsafe, please contact someone now.</p>
+    <label class="preference" for="helpCountry" style="margin-top:12px">Choose your country to see help near you<select id="helpCountry"></select></label>
+    <div id="helpBody" style="margin-top:10px;font:14px/1.7 system-ui,sans-serif"></div>
+    <p style="margin-top:8px;font-size:12px">Numbers can change, so please check each service’s own page. More countries: <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> or <a href="https://www.iasp.info/crisis-centres-helplines/" target="_blank" rel="noopener">iasp.info</a>.</p></section>
+  <p class="footnote" id="newsBox" style="display:none;text-align:center"><a id="newsLink" href="#" target="_blank" rel="noopener" style="color:inherit">Get a book or film for sad days by email ✉</a></p>
+  <p class="footnote" style="text-align:center">More on old books and new ways of reading: <a href="https://www.youtube.com/@OldbooksNewworld" target="_blank" rel="noopener" style="color:inherit">Old Books New World on YouTube ↗</a></p>
+  <p class="footnote" id="tipBox" style="display:none;text-align:center">If these books kept you company, you can <a id="tipLink" href="#" target="_blank" rel="noopener" style="color:inherit">buy me a coffee ☕</a>.</p>
+  </main>
+</div>
+<script>
+const books = {
+  heartbreak: [
+    {title:'White Nights',author:'Fyodor Dostoevsky',year:'1848',label:'For a heart still reaching',why:'A brief, tender encounter between two lonely people, and the fragile hope that being seen—even briefly—can change a life.',quote:'“A whole moment of happiness! Is that really too little for the whole of a human life?”',meta:'Short read · wistful, intimate, quietly devastating',symbol:'☾',note:'Read slowly, preferably at night. Let the story keep you company; you don’t have to turn its sadness into a lesson.'},
+    {title:'First Love',author:'Ivan Turgenev',year:'1860',label:'For the ache of remembering',why:'A young man looks back on his first love and discovers how desire, humiliation, and tenderness can remain vivid long after youth has passed.',quote:'A beautiful, painful portrait of love before we know what love can cost.',meta:'Short novella · nostalgic, bittersweet, emotionally precise',symbol:'❧',note:'Best for a heartbreak that comes with memories. Notice how the narrator changes as he remembers.'},
+    {title:'The Kreutzer Sonata',author:'Leo Tolstoy',year:'1889',label:'For love turned painful',why:'An unsettling confession about jealousy, intimacy, and the ways possessiveness can disguise itself as love. This is a sharp, difficult read rather than a comfort.',quote:'A feverish argument with the darker corners of romantic attachment.',meta:'Novella · intense, provocative, psychologically raw',symbol:'♧',note:'Choose this if you want to examine love’s shadows—not if you need something gentle tonight.'}
+  ],
+  lonely: [
+    {title:'Notes from Underground',author:'Fyodor Dostoevsky',year:'1864',label:'For the outsider inside you',why:'A painfully self-aware narrator pushes people away while desperately wanting to be understood. It captures the exhausting loop of overthinking and isolation.',quote:'The mind can become a room we lock from the inside.',meta:'Short novel · claustrophobic, ironic, fiercely introspective',symbol:'⌘',note:'Take it in small portions. You don’t have to agree with the narrator to recognize the loneliness beneath his defenses.'},
+    {title:'White Nights',author:'Fyodor Dostoevsky',year:'1848',label:'For wanting to be seen',why:'A dreamer who has lived mostly in his imagination meets someone who listens. The connection is brief, but it makes his solitude visible in a new way.',quote:'A small lamp of human connection in a very large night.',meta:'Short read · tender, hopeful, bittersweet',symbol:'☾',note:'A good choice when you need a little warmth without pretending loneliness disappears overnight.'},
+    {title:'The Death of Ivan Ilyich',author:'Leo Tolstoy',year:'1886',label:'For feeling unseen in a crowded room',why:'A successful man discovers that the people around him may not truly know him. A spare, profound story about the difference between a life that looks right and one that feels real.',quote:'What if being understood matters more than being admired?',meta:'Novella · clear-eyed, existential, deeply humane',symbol:'✧',note:'Give yourself time after the ending. It asks large questions in a very quiet voice.'}
+  ],
+  wrecked: [
+    {title:'The Brothers Karamazov',author:'Fyodor Dostoevsky',year:'1880',label:'For the questions that won’t let go',why:'Faith, doubt, freedom, cruelty, responsibility, and love collide in a family that feels like a whole troubled world. It meets existential anguish without making it small.',quote:'A novel for when every answer opens into another question.',meta:'Long novel · philosophical, turbulent, spiritually searching',symbol:'✶',note:'You can start with one chapter at a time. This book is a long conversation, not a race.'},
+    {title:'The Death of Ivan Ilyich',author:'Leo Tolstoy',year:'1886',label:'For when life feels unreal',why:'A man’s confrontation with death forces him to question the comfortable assumptions that shaped his life. Brief, unsparing, and surprisingly compassionate.',quote:'A small book with the weight of an entire life.',meta:'Novella · existential, lucid, transformative',symbol:'✧',note:'Read when you have a little emotional room. It can be confronting, but it is not without tenderness.'},
+    {title:'Demons',author:'Fyodor Dostoevsky',year:'1872',label:'For chaos inside and out',why:'A community is pulled into ideological fever, manipulation, and moral collapse. It is a dark portrait of what happens when ideas detach from empathy.',quote:'When the world feels unmoored, this novel stares directly into the storm.',meta:'Long novel · dark, political, feverish',symbol:'♜',note:'This is the heaviest option here. Choose it for intellectual intensity rather than emotional comfort.'}
+  ],
+  numb: [
+    {title:'Oblomov',author:'Ivan Goncharov',year:'1859',label:'For the quiet paralysis',why:'Oblomov dreams, delays, and struggles to enter the life waiting outside his door. The novel understands inertia not merely as laziness, but as a shelter that can become a prison.',quote:'A gentle, funny, melancholy portrait of a life put on hold.',meta:'Long novel · humane, wry, quietly sad',symbol:'⌂',note:'You don’t need to become productive after reading it. Just notice what feels safe about staying still—and what it costs.'},
+    {title:'The Overcoat',author:'Nikolai Gogol',year:'1842',label:'For feeling almost invisible',why:'A modest clerk’s small hope becomes a devastating story about dignity and the cruelty of a world that barely notices him.',quote:'A tiny need can reveal a whole society’s coldness.',meta:'Short story · bleakly comic, compassionate, haunting',symbol:'❄',note:'A short read for days when you feel overlooked. Its sadness is sharpened by absurdity.'},
+    {title:'The Death of Ivan Ilyich',author:'Leo Tolstoy',year:'1886',label:'For waking up inside your own life',why:'A man’s carefully arranged existence begins to feel strange and empty. This concise story asks what it means to truly live rather than merely perform a life.',quote:'Sometimes numbness is the question a story helps us hear.',meta:'Novella · clear, searching, humane',symbol:'✧',note:'Let it be a question, not a verdict on your own life.'}
+  ],
+  guilty: [
+    {title:'Crime and Punishment',author:'Fyodor Dostoevsky',year:'1866',label:'For a conscience that won’t be quiet',why:'Raskolnikov tries to reason his way past a terrible act, only to discover that the mind can invent arguments more easily than it can escape moral reality.',quote:'A gripping study of guilt, isolation, pride, and the possibility of change.',meta:'Long novel · psychologically intense, morally searching',symbol:'⚖',note:'This book is dark and psychologically intense. Read it for its questions about responsibility, not as a measure of your worth.'},
+    {title:'Resurrection',author:'Leo Tolstoy',year:'1899',label:'For regret and the work of repair',why:'A man confronts the harm he caused and tries to reckon with responsibility, privilege, and what meaningful change might require.',quote:'Regret becomes more honest when it turns toward repair.',meta:'Long novel · moral, social, ultimately searching',symbol:'✧',note:'Ask what is within your control now. The past matters, but it is not the only thing that exists.'},
+    {title:'The Eternal Husband',author:'Fyodor Dostoevsky',year:'1870',label:'For the uncomfortable truths',why:'An unnerving encounter between two men exposes resentment, humiliation, and the ways people remain entangled with the past.',quote:'A compact psychological duel with no easy absolution.',meta:'Novella · tense, darkly comic, intimate',symbol:'♧',note:'Best when you want a close psychological study rather than reassurance.'}
+  ],
+  tired: [
+    {title:'The Death of Ivan Ilyich',author:'Leo Tolstoy',year:'1886',label:'For when you can’t keep performing',why:'When the usual measures of success stop making sense, Tolstoy asks what remains. The story is honest about fear but also attentive to compassion at the edge of despair.',quote:'A quiet reminder that a life can be reconsidered, even late in the story.',meta:'Novella · reflective, direct, humane',symbol:'✧',note:'Read a few pages at a time. You are allowed to rest before deciding what anything means.'},
+    {title:'Oblomov',author:'Ivan Goncharov',year:'1859',label:'For the exhausted dreamer',why:'A man retreats from demands he cannot seem to meet. The book is funny and sad about the gap between wanting a life and having the energy to live it.',quote:'For when even beginning feels like a whole day’s work.',meta:'Long novel · gentle, ironic, melancholic',symbol:'⌂',note:'Let this be permission to examine your exhaustion without insulting yourself for it.'},
+    {title:'White Nights',author:'Fyodor Dostoevsky',year:'1848',label:'For one soft light in a hard week',why:'A small, fleeting connection interrupts the solitude of a dreamer. It offers no grand solution—only the human importance of one moment that feels real.',quote:'A small story for a tired heart that still wants tenderness.',meta:'Short read · tender, wistful, quietly hopeful',symbol:'☾',note:'A short book may be the kindest choice tonight. You don’t have to read for hours to be accompanied.'}
+  ]
+};
+// ---- Additional recommendations ----
+const B = {
+  anna:{title:'Anna Karenina',author:'Leo Tolstoy',year:'1878',label:'For love that costs everything',why:'A woman chooses passion over a rigid society and pays for it, while a second thread follows a very different, quieter search for meaning. It is generous to everyone in it, even when they fail each other.',quote:'A vast, compassionate study of love, desire, and what society does to both.',meta:'Long novel · sweeping, tragic, deeply humane',symbol:'♢',note:'You can read it in sittings of a few chapters. Notice how much attention Tolstoy gives to ordinary kindness alongside the tragedy.',heavy:true,caution:'Content note: this novel includes a suicide. If that is close to where you are right now, consider one of the gentler picks instead.'},
+  onegin:{title:'Eugene Onegin',author:'Alexander Pushkin',year:'1833',label:'For the love that arrived too late',why:'A bored young aristocrat rejects a sincere love, then realizes years later what he threw away. A verse novel about timing, pride, and regret, with wit and tenderness throughout.',quote:'The story of two people who understand each other one moment too late.',meta:'Verse novel · wry, melancholic, bittersweet',symbol:'✉',note:'Choose a good modern translation and read it aloud in short stretches. The music of it is part of the comfort.'},
+  zhivago:{title:'Doctor Zhivago',author:'Boris Pasternak',year:'1957',label:'For love and loss in a broken world',why:'A poet-physician tries to hold on to love, nature, and his inner life while revolution and war tear everything around him apart. Sorrowful, but alive to beauty.',quote:'A novel that insists small, private feeling still matters in huge, terrible times.',meta:'Long novel · lyrical, elegiac, searching',symbol:'❄',note:'Let the long winter chapters be atmosphere rather than plot. Read it for how it looks at the world, not just what happens.'},
+  family:{title:'Family Happiness',author:'Leo Tolstoy',year:'1859',label:'For when the glow faded',why:'A young woman’s whirlwind romance settles into marriage, and she watches the early passion change into something harder to name. Quiet and honest about how love shifts.',quote:'A gentle, rueful look at what happens after the beginning of a love story.',meta:'Novella · tender, reflective, bittersweet',symbol:'❦',note:'A good choice if your heartbreak is about slow change rather than a sudden ending.'},
+  spring:{title:'Spring Torrents',author:'Ivan Turgenev',year:'1872',label:'For a youthful mistake that still stings',why:'A man looks back on a summer in Germany when he fell in love and then betrayed it. Full of fresh feeling and the long shadow of a decision made too easily.',quote:'A story about how quickly a life can turn on one careless choice.',meta:'Novella · nostalgic, remorseful, lyrical',symbol:'☘',note:'Good for regret that has some tenderness in it. Notice how the narrator treats his younger self.'},
+  lady:{title:'The Lady with the Dog',author:'Anton Chekhov',year:'1899',label:'For quiet lives and unexpected connection',why:'Two people stuck in unfulfilling marriages meet on holiday and find that something real has entered their routine. Small, precise, and unsentimental, yet deeply moving.',quote:'A short story that sits with the question of what to do when you finally feel seen.',meta:'Short story · gentle, wistful, humane',symbol:'☂',note:'It takes under an hour. Read it in one go and leave a little silence afterward.'},
+  poor:{title:'Poor Folk',author:'Fyodor Dostoevsky',year:'1846',label:'For two lonely people writing to each other',why:'A humble clerk and a young woman in similar hardship exchange letters, each one a lifeline for the other. Dostoevsky’s first novel is heartfelt and tender about the dignity of the overlooked.',quote:'Proof that a sincere letter can be a place to live.',meta:'Short novel · epistolary, tender, quietly devastating',symbol:'✎',note:'The letter format makes it easy to read in small pieces, one correspondence at a time.'},
+  hero:{title:'A Hero of Our Time',author:'Mikhail Lermontov',year:'1840',label:'For a restless emptiness',why:'Pechorin is charming, intelligent, and bored to the bone, damaging the people who come close to him and himself. A sharp portrait of what it looks like when nothing satisfies.',quote:'A cool, clear-eyed look at a person who feels everything and nothing.',meta:'Short novel · cold-eyed, restless, psychologically sharp',symbol:'⚔',note:'It is told in separate episodes, so you can stop and start without losing the thread.'},
+  fathers:{title:'Fathers and Sons',author:'Ivan Turgenev',year:'1862',label:'For the distance between people who love each other',why:'A confident young nihilist clashes with the older generation, and then falls into feelings his philosophy cannot explain. Poignant about family, pride, and the limits of certainty.',quote:'A book about how hard it is to be understood, even by those closest to you.',meta:'Short novel · wry, humane, bittersweet',symbol:'☙',note:'Pay attention to the parents. Their quiet love is the emotional centre of the book.'},
+  idiot:{title:'The Idiot',author:'Fyodor Dostoevsky',year:'1869',label:'For being too sincere for the room',why:'Prince Myshkin is gentle and honest in a society that finds sincerity suspicious. A painful, beautiful novel about goodness in an unforgiving world.',quote:'A novel for anyone who has felt like the only person telling the truth in the room.',meta:'Long novel · tender, tragic, philosophical',symbol:'✦',note:'It is long and sometimes feverish. Let yourself drift through the drawing-room scenes as you would a play.'},
+  master:{title:'The Master and Margarita',author:'Mikhail Bulgakov',year:'1967',label:'For when the world has stopped making sense',why:'The devil visits Moscow, a writer is crushed by censorship, and a woman will do anything for love. Absurd, funny, and surprisingly consoling about courage and creativity.',quote:'A reminder that strangeness can be a way of telling the truth.',meta:'Long novel · satirical, fantastical, deeply moving',symbol:'☽',note:'If the weight of everything is too heavy, this is the one that lets you laugh while it hurts.'},
+  life:{title:'Life and Fate',author:'Vasily Grossman',year:'1980',label:'For grief at the scale of history',why:'A panorama of families caught in the Battle of Stalingrad and the terror of the Soviet state. It is unflinching about cruelty and extraordinary in its belief in ordinary kindness.',quote:'A monumental book about how people stay human when everything pushes them not to.',meta:'Long novel · epic, morally searching, devastating',symbol:'✷',note:'Read it in small doses. Its closing movements of love and kindness are worth the weight.',heavy:true,caution:'Content note: war, genocide, and state violence are depicted directly.'},
+  war:{title:'War and Peace',author:'Leo Tolstoy',year:'1869',label:'For when you need life to feel large again',why:'Families, battles, love, and loss across a whole society, with characters who are lost and then, slowly, find a reason to continue. Despite its size, it is warm company.',quote:'A novel that answers heavy days with the sheer breadth of life.',meta:'Long novel · expansive, humane, ultimately hopeful',symbol:'☀',note:'Treat it as a season rather than a task. Many readers return to it for years, a few chapters at a time.'},
+  ward:{title:'Ward No. 6',author:'Anton Chekhov',year:'1892',label:'For the walls you cannot see',why:'A complacent doctor drifts through a provincial life until a conversation with one of his patients breaks his certainty. A bleak, pointed novella about indifference and isolation.',quote:'A short, sharp look at how easily we stop noticing what is in front of us.',meta:'Novella · bleak, philosophical, unsettling',symbol:'⌘',note:'It is a heavy little book. Read it for its clarity rather than for comfort.',heavy:true,caution:'Content note: bleak themes of confinement and death. Pick something gentler if you are already feeling very low.'},
+  denisovich:{title:'One Day in the Life of Ivan Denisovich',author:'Aleksandr Solzhenitsyn',year:'1962',label:'For getting through one day at a time',why:'A single day in a Soviet labour camp, told through small victories: a warm piece of bread, a finished task, a moment of dignity. It is plain, brief, and oddly steadying.',quote:'A story that makes the case for small endurances.',meta:'Short novel · spare, steady, quietly hopeful',symbol:'☕',note:'You can finish it in a single evening. Pay attention to the little things that keep Ivan Denisovich going.'},
+  steppe:{title:'The Steppe',author:'Anton Chekhov',year:'1888',label:'For a slow, open-air breath',why:'A boy travels across the vast Russian steppe by cart to start school, and the journey is all landscape, weather, and passing strangers. Little happens, and that is the comfort.',quote:'A gentle book for minds that need quiet, not plot.',meta:'Novella · tender, unhurried, wistful',symbol:'☁',note:'Read outside if you can, or by an open window. It rewards slowness.'},
+  gambler:{title:'The Gambler',author:'Fyodor Dostoevsky',year:'1867',label:'For the pull of a mistake you keep repeating',why:'A tutor in a European spa town is caught between a hopeless love and a roulette wheel. Fast, feverish, and honest about compulsion and the shame that follows.',quote:'A sharp portrait of how regret can feed the very habit that causes it.',meta:'Short novel · feverish, intense, psychologically raw',symbol:'♠',note:'It moves quickly. Notice how self-awareness alone does not stop the narrator, and be kind to yourself about your own patterns.'},
+  sergius:{title:'Father Sergius',author:'Leo Tolstoy',year:'1911',label:'For when you tried to be good and it still hurts',why:'A proud, ambitious man withdraws into the monastic life to escape his failures, only to find that his pride has come along. Honest about guilt, vanity, and the search for real humility.',quote:'A story that asks what it means to be forgiven by yourself.',meta:'Novella · searching, moral, introspective',symbol:'✝',note:'Take it as a mirror rather than a verdict. The ending is gentler than the rest suggests.'}
+};
+const extraByMood = {
+  heartbreak:['anna','onegin','zhivago','family','spring'],
+  lonely:['lady','poor','hero','fathers','idiot'],
+  wrecked:['master','life','war','ward'],
+  numb:['hero','onegin','lady','ward'],
+  guilty:['spring','gambler','sergius'],
+  tired:['denisovich','steppe','war','zhivago']
+};
+Object.entries(extraByMood).forEach(([mood,keys])=>keys.forEach(k=>books[mood].push(B[k])));
+const extraColors = {'Anna Karenina':['#6B3A3F','#241A1D'],'Eugene Onegin':['#5E6A7D','#222A38'],'Doctor Zhivago':['#5F7384','#1E2B35'],'Family Happiness':['#8A6F5B','#33261F'],'Spring Torrents':['#6E8062','#25301F'],'The Lady with the Dog':['#6E7F8E','#26323C'],'Poor Folk':['#7A6A58','#2D241D'],'A Hero of Our Time':['#4F5A66','#1D232A'],'Fathers and Sons':['#7C6B4C','#2D2619'],'The Idiot':['#6A5A78','#241E2D'],'The Master and Margarita':['#3E3A55','#17151F'],'Life and Fate':['#5A5A54','#1E1E1B'],'War and Peace':['#7F6A44','#2B2316'],'Ward No. 6':['#4A5A58','#1A2321'],'One Day in the Life of Ivan Denisovich':['#6A7078','#22262B'],'The Steppe':['#8C8A5A','#34331F'],'The Gambler':['#5E3A3A','#1F1416'],'Father Sergius':['#6B5B4A','#251E17']};
+
+// ---- Library expansion: Old Rus’ to contemporary ----
+const FORM={s:'Short story',n:'Novella',r:'Short novel',L:'Long novel',e:'Epic poem',c:'Chronicle',m:'Spiritual memoir',t:'Medieval tale',j:'Travel polemic',d:'Story cycle'};
+const LAB={h:'For an aching heart',l:'For feeling alone',w:'For when nothing feels solid',n:'For the quiet numbness',g:'For a heavy conscience',t:'For a weary spirit'};
+const KEY={h:'heartbreak',l:'lonely',w:'wrecked',n:'numb',g:'guilty',t:'tired'};
+const NOTES={s:'A short read. Take it in one sitting and leave a little silence afterward.',n:'Short enough for a weekend, deep enough to stay with you. Read it slowly.',r:'A compact book. A few chapters a night is plenty.',L:'Treat it as a season, not a task. A few chapters at a time is enough.',e:'Read it aloud if you can, in a good translation with notes.',c:'Dip in rather than reading straight through. The strange, human moments are the reward.',m:'Raw and direct. Let the voice carry you.',t:'A very old story with a surprisingly human heart. Notes in your edition help.',j:'Pointed and angry. Read it in short stretches.',d:'Each piece stands alone, so stop whenever you need to.'};
+const eraKey=y=>y<=1700?'old':y<1800?'18':y<1900?'19':y<1918?'silver':y<1992?'soviet':'modern';
+const eraName={old:'Old Rus’',18:'the 18th century','19':'the Golden Age',silver:'the Silver Age',soviet:'the Soviet era',modern:'contemporary Russia'};
+const yearNum=b=>bceYear(b.year);
+function hashColor(t){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))%360;return [`hsl(${h},28%,38%)`,`hsl(${h},30%,15%)`];}
+const SYM=['✶','☾','❧','✧','❄','☙','✦','⌘','☘','✉'];
+// [title, author, year, form, moods, tone, why, content note?]
+const MORE=[
+['The Tale of Igor’s Campaign','Anonymous','c. 1185','e','w,g','elegiac, lyrical, mournful','A prince’s doomed raid and the poem that mourns it, including a wife’s famous lament from the city wall.'],
+['The Tale of Bygone Years','Attributed to Nestor','c. 1113','c','w,t','sweeping, strange, searching','Rus’ remembers its own beginnings, with legends, feuds, and flashes of startling tenderness.'],
+['The Tale of Peter and Fevronia','Yermolai-Erazm','c. 1550','t','h,t','tender, hopeful, gentle','A medieval love story about patience, humility, and two lives bound so tightly they die on the same day.'],
+['The Life of Archpriest Avvakum','Avvakum Petrov','c. 1672','m','w,t,l','raw, defiant, intense','An exiled priest tells his own story of cold, hunger, and stubborn faith in vivid spoken Russian.'],
+['Poor Liza','Nikolay Karamzin','1792','n','h,l','tender, sentimental, tragic','A peasant girl’s love for a nobleman, and the book that made Russian readers cry.','Content note: includes a suicide.'],
+['Journey from St Petersburg to Moscow','Alexander Radishchev','1790','j','w','indignant, searching, bleak','A traveller’s sorrowing eyes on serfdom; it was so daring that the author was exiled.'],
+['The Queen of Spades','Alexander Pushkin','1834','s','g,w','dark, intense, haunting','Obsession, a secret, and a ghost: a short, sharp story about what ambition costs.'],
+['The Captain’s Daughter','Alexander Pushkin','1836','n','h,t','tender, hopeful, adventurous','Young love and honour in the middle of a rebellion. Warm company when you are worn out.'],
+['The Stationmaster','Alexander Pushkin','1831','s','l,g,h','tender, humane, quietly sad','A father loses his daughter and can’t let go; Pushkin’s smallest, saddest story.'],
+['The Nose','Nikolai Gogol','1836','s','n,w','absurd, comic, uneasy','A man wakes up without his nose. A funny story about identity, status, and feeling like a stranger to yourself.'],
+['Diary of a Madman','Nikolai Gogol','1835','s','l,w','unsettling, darkly comic, tragic','A lowly clerk’s mind slips as the world ignores him. Funny first, then deeply sad.'],
+['Dead Souls','Nikolai Gogol','1842','r','n,t','satirical, ironic, melancholic','A con man tours provincial Russia, and the satire gradually turns into sorrow for everyone in it.'],
+['Rudin','Ivan Turgenev','1856','n','l,g,t','wistful, introspective, bittersweet','A brilliant talker who can’t turn words into a life. Gentle about wasted potential.'],
+['A Nest of Gentlefolk','Ivan Turgenev','1859','r','h,g,t','tender, elegiac, bittersweet','Late love, an old marriage, and the quiet grace of letting go.'],
+['Mumu','Ivan Turgenev','1854','s','l,w,h','bleak, tender, devastating','A deaf serf and the dog he loves, and a master who cannot tolerate either.','Content note: an animal dies.'],
+['Bezhin Meadow','Ivan Turgenev','1851','s','t,l','gentle, atmospheric, folkloric','Boys share ghost stories by a night fire. A calm, lovely evening of a story.'],
+['The Double','Fyodor Dostoevsky','1846','n','n,w,l','unsettling, psychological, claustrophobic','A clerk meets a confident duplicate of himself. Anxiety turned into a story.'],
+['Notes from the House of the Dead','Fyodor Dostoevsky','1862','r','w,t','unsparing, humane, searching','Life in a Siberian prison camp, with surprising compassion for the people in it.','Content note: harsh prison conditions and punishment.'],
+['Childhood','Leo Tolstoy','1852','n','t,l','tender, nostalgic, vivid','A boy’s early years, with all their joys and small heartbreaks.'],
+['The Cossacks','Leo Tolstoy','1863','r','n,h,t','sensuous, wistful, searching','A bored aristocrat flees to the Caucasus and finds a different way of living.'],
+['Three Deaths','Leo Tolstoy','1859','s','w','sober, humane, reflective','A lady, a coachman, and a tree: three ways of meeting the end.','Content note: about dying and death.'],
+['Master and Man','Leo Tolstoy','1895','n','g,w,t','humane, moral, transformative','A snowstorm, a selfish merchant, and a night that changes him. Short and shattering.'],
+['After the Ball','Leo Tolstoy','1911','s','g,w','moral, haunting, spare','A joyful evening turns into a memory that rearranges a man’s whole life.'],
+['Hadji Murat','Leo Tolstoy','1912','n','w,t','spare, tragic, humane','A proud Chechen rebel is caught between empires. Lucid, quiet, and very moving.'],
+['Misery','Anton Chekhov','1886','s','l,w','quietly devastating, humane, brief','A cab driver tries to tell someone his son has died. Nobody listens, so he tells his horse.','Content note: a child’s death.'],
+['Vanka','Anton Chekhov','1886','s','l,t','heartbreaking, brief, tender','A boy apprentice writes to his grandfather asking to be rescued.'],
+['The Darling','Anton Chekhov','1899','s','h,l','gentle, wry, humane','A woman who becomes whatever the person she loves needs, and what that says about love.'],
+['The Bet','Anton Chekhov','1889','s','w,g','philosophical, tense, searching','A banker and a young lawyer wager on whether life in solitary confinement beats death.'],
+['A Boring Story','Anton Chekhov','1889','n','n,w','introspective, bleak, honest','An ageing professor realises he has lost the thread of his own life.'],
+['The Black Monk','Anton Chekhov','1894','n','w','feverish, psychological, haunting','A scholar’s lofty visions cost him the people around him.'],
+['The Bishop','Anton Chekhov','1902','s','t,l,w','quiet, luminous, sorrowful','A dying bishop longs to be known simply as a son.','Content note: about dying and death.'],
+['Kashtanka','Anton Chekhov','1887','s','t,l','tender, gentle, light','A lost dog finds a new home, and then has to choose. A kind, small story.'],
+['Lady Macbeth of the Mtsensk District','Nikolai Leskov','1865','n','h,g,w','dark, intense, raw','A bored merchant’s wife takes love and violence down a ruinous road.','Content note: murder and violence.'],
+['The Enchanted Wanderer','Nikolai Leskov','1873','n','w,t,g','picaresque, spiritual, searching','A man tells of the many lives he has survived, one improbable story at a time.'],
+['The Golovlyov Family','Mikhail Saltykov-Shchedrin','1880','r','n,w,g','bleak, dark, psychologically raw','A family that slowly destroys itself with greed and cruelty.','Content note: bleak family cruelty.'],
+['The Blind Musician','Vladimir Korolenko','1886','r','t,w,h','tender, hopeful, humane','A blind boy becomes a musician and learns to see in a new way.'],
+['Olesya','Alexander Kuprin','1898','n','h,l','tender, lyrical, tragic','A city writer and a forest girl, and a love that cannot survive the village.'],
+['Twenty-Six Men and a Girl','Maxim Gorky','1899','s','l,t','bittersweet, vivid, tender','Bakery workers pin their hopes on one girl, and then their illusions break.'],
+['Childhood','Maxim Gorky','1913','n','l,t,w','vivid, raw, humane','A boy grows up amid cruelty and discovers the kindness of a few people.'],
+['Lazarus','Leonid Andreyev','1906','s','w','dark, philosophical, haunting','Lazarus returns from the dead, and his silence changes everyone he meets.'],
+['The Petty Demon','Fyodor Sologub','1907','r','n,w,g','dark, claustrophobic, satirical','A provincial teacher’s paranoia and small cruelty swallow him whole.'],
+['Petersburg','Andrei Bely','1913','r','w,n','feverish, dark, experimental','A bomb, a city, and a father and son in a swirl of fog and dread.'],
+['The Gentleman from San Francisco','Ivan Bunin','1915','s','w,n','ironic, philosophical, spare','A rich man’s holiday ends. A cool, lucid fable about the limits of comfort.','Content note: about dying and death.'],
+['We','Yevgeny Zamyatin','1924','r','w,n','dystopian, intense, lyrical','A mathematician in a glass city of perfect order discovers love and doubt.'],
+['The White Guard','Mikhail Bulgakov','1925','r','h,w,t','warm, elegiac, humane','One Kyiv family clings to home and each other through civil war.'],
+['Heart of a Dog','Mikhail Bulgakov','1925','n','n,w','satirical, darkly comic, strange','A professor transforms a stray dog into a man. Absurd and sharp.'],
+['Mary','Vladimir Nabokov','1926','r','h,l','nostalgic, tender, wistful','A lonely émigré in Berlin relives his first love, and then faces what is left.'],
+['Envy','Yuri Olesha','1927','r','n,l','sharp, introspective, ironic','A bitter dreamer watches the new world pass him by.'],
+['The Twelve Chairs','Ilf and Petrov','1928','L','t,n','comic, light, warm','A treasure hunt across Soviet Russia. A real comfort when you need to laugh.'],
+['And Quiet Flows the Don','Mikhail Sholokhov','1928','L','h,w,g','epic, raw, tragic','Love and war among the Don Cossacks, across revolution and civil war.','Content note: war violence.'],
+['An Evening with Claire','Gaito Gazdanov','1930','r','h,l','lyrical, nostalgic, bittersweet','An émigré looks back on a lost love, a lost country, and the person he used to be.'],
+['The Foundation Pit','Andrei Platonov','1930','n','w,n','bleak, absurd, philosophical','Workers dig a pit for a utopian building that will never rise.'],
+['Odessa Tales','Isaac Babel','1931','d','t,n','vivid, wry, humane','Gangsters, tricksters, and the sunlit chaos of Odessa. A burst of energy.'],
+['The Gift','Vladimir Nabokov','1938','r','l,t,h','lyrical, literary, tender','A young émigré poet in Berlin falls in love and finds his voice.'],
+['Sofia Petrovna','Lydia Chukovskaya','1940','n','w,n','quiet, devastating, spare','A loyal Soviet typist watches the Terror destroy her world.','Content note: state terror.'],
+['Telegram','Konstantin Paustovsky','1946','s','g,l,t','tender, gentle, regretful','A woman’s daughter neglects her until it’s too late. A small story that will stay with you.'],
+['Dark Avenues','Ivan Bunin','1943','d','h,g,l','bittersweet, lyrical, nostalgic','Stories of love remembered, missed, and mourned.'],
+['Matryona’s Home','Aleksandr Solzhenitsyn','1963','n','l,t,g','quiet, humane, tender','A traveller lodges with a poor villager and slowly understands what she has been to everyone.'],
+['Kolyma Tales','Varlam Shalamov','1966','d','w','unsparing, spare, devastating','Brief, unadorned stories of the camps. Essential and very heavy.','Content note: camp brutality and death.'],
+['Cancer Ward','Aleksandr Solzhenitsyn','1968','L','w,t','humane, searching, sorrowful','Patients in a ward talk about life and death, and how to meet each.','Content note: serious illness and death.'],
+['Farewell to Matyora','Valentin Rasputin','1976','n','t,w','elegiac, humane, quietly sad','An island village is about to be flooded, and its elders refuse to leave.'],
+['The House on the Embankment','Yuri Trifonov','1976','n','g,n','quiet, moral, haunting','A man looks back on a betrayal he made when he was young and ambitious.'],
+['Roadside Picnic','Arkady and Boris Strugatsky','1972','r','n,w','strange, haunting, philosophical','A stalker enters an alien Zone for scraps of wonder. Awe, loss, and hope.'],
+['Moscow–Petushki','Venedikt Yerofeyev','1973','n','n,w,t','dark, absurd, tender','A drunk man’s train ride toward love. Hilarious and heart-wrenching.','Content note: heavy alcohol use and tragic ending.'],
+['On the Golden Porch','Tatyana Tolstaya','1983','d','h,l','luminous, bittersweet, tender','Childhood, lost love, and fading hope, written with startling beauty.'],
+['The Suitcase','Sergei Dovlatov','1986','d','l,n,t','wry, wistful, humane','Eight objects from a suitcase unlock eight stories of life in exile. Funny and sad.'],
+['Time: Night','Ludmilla Petrushevskaya','1992','n','w,l','raw, dark, unflinching','A woman holds her broken family together in a shrinking life.','Content note: family distress and harsh themes.'],
+['Omon Ra','Victor Pelevin','1992','n','w,n','surreal, bleak, satirical','A young man’s boyhood dream of space becomes a bitter joke.'],
+['Medea and Her Children','Ludmila Ulitskaya','1996','n','t,l,h','warm, humane, bittersweet','An old Crimean woman holds her large family together with quiet love.'],
+['Letter Book','Mikhail Shishkin','2010','L','h,l','epistolary, tender, lyrical','A soldier and the girl he left write letters that never quite meet.'],
+['Laurus','Eugene Vodolazkin','2012','L','w,t,g','spiritual, luminous, searching','A medieval healer’s long, strange life of guilt, kindness, and renewal.'],
+['Zuleikha Opens Her Eyes','Guzel Yakhina','2015','L','w,t','resilient, harrowing, humane','A Tatar woman is exiled to Siberia and finds a new strength.','Content note: violence, hardship, and loss.']
+];
+MORE.forEach(([title,author,year,form,moods,tone,why,caution])=>{
+  const yr=parseInt(String(year).replace(/\D/g,''),10);
+  const first=moods.split(',')[0];
+  const book={title,author,year,label:LAB[first],why,quote:`From ${eraName[eraKey(yr)]}.`,meta:`${FORM[form]} · ${tone}`,symbol:SYM[[...title].reduce((a,c)=>a+c.charCodeAt(0),0)%SYM.length],note:NOTES[form]+(caution?' '+caution:''),caution:caution||'',heavy:!!caution};
+  moods.split(',').forEach(m=>books[KEY[m]].push(book));
+});
+
+// ---- World classics: poems, essays, plays, novels, stories ----
+Object.assign(FORM,{p:'Poems',z:'Essay',y:'Play',f:'Philosophy'});
+Object.assign(NOTES,{p:'Read a few poems at a time, aloud if you can. Let the silence between them do some of the work.',z:'Essays reward slow reading. Take a paragraph, stop, and think.',y:'Plays are built to be heard. Read the lines aloud, or find a recording.',f:'Take one short passage a day instead of reading straight through.'});
+const REGNAME={RU:'Russia',EU:'Europe',AM:'the Americas',EA:'East Asia',SA:'South Asia',SE:'Southeast Asia',ME:'the Middle East and North Africa',AF:'Africa',OC:'Oceania'};
+const bceYear=s=>{const n=parseInt(String(s).replace(/\D/g,''),10);return /BCE/.test(s)?-n:n;};
+const genEra=y=>y<=500?'anc':y<1500?'med':y<1800?'early':y<1900?'19':y<1946?'mid20':'now';
+// [title, author, year, region, form, moods, tone, why, content note?]
+const WORLD=[
+['The Epic of Gilgamesh','Anonymous (Mesopotamia)','c. 1200 BCE','ME','e','w,l','elegiac, searching, ancient','A king breaks down when his closest friend dies and sets out to defeat death. One of the oldest stories about grief.'],
+['The Iliad','Homer','c. 750 BCE','EU','e','w,g','epic, tragic, humane','A war epic that ends not in triumph but in two enemies weeping together over their dead.','Content note: war violence.'],
+['The Odyssey','Homer','c. 700 BCE','EU','e','t,h,l','adventurous, hopeful, enduring','A man spends ten years trying to get home. A deep comfort for anyone far from where they belong.'],
+['Antigone','Sophocles','c. 441 BCE','EU','y','g,w','intense, moral, tragic','A woman defies a king to bury her brother, and the play asks what we owe the dead.','Content note: includes suicides.'],
+['The Book of Job','Anonymous (Hebrew Bible)','c. 500 BCE','ME','p','w,g,t','philosophical, raw, searching','A good man loses everything and demands an answer. A poem that makes room for anger and grief.'],
+['The Book of Songs (Shijing)','Anonymous (China)','c. 600 BCE','EA','p','h,l','tender, simple, ancient','Folk songs of longing, separation, and ordinary life, collected nearly 3,000 years ago.'],
+['Tao Te Ching','Laozi','c. 350 BCE','EA','f','t,n','calm, spare, philosophical','Eighty-one short poems on softness, stillness, and letting go of effort.'],
+['The Bhagavad Gita','Anonymous (India)','c. 200 BCE','SA','f','w,g,n','philosophical, searching, consoling','A warrior freezes on the battlefield, and a conversation begins about duty, doubt, and action.'],
+['Meditations','Marcus Aurelius','c. 170','EU','z','w,t,n','calm, introspective, stoic','An emperor’s private notes to himself on staying steady when everything is difficult.'],
+['The Cloud Messenger','Kalidasa','c. 400','SA','p','h,l','lyrical, tender, longing','An exiled spirit asks a passing cloud to carry a message of love to his wife.'],
+['Poems of Du Fu','Du Fu','c. 757','EA','p','w,l,t','elegiac, humane, plain-spoken','A poet watching his country collapse finds words for exile, war, and small mercies.'],
+['The Pillow Book','Sei Shonagon','c. 1002','EA','z','t,n','witty, light, observant','Lists, gossip, and sharp observations from a Heian court lady. Good company on a flat day.'],
+['The Tale of Genji','Murasaki Shikibu','c. 1010','EA','L','h,l,g','lyrical, bittersweet, elegiac','A prince’s loves and losses in the Heian court, often called the first novel.'],
+['Rubaiyat','Omar Khayyam','c. 1100','ME','p','n,w,t','philosophical, wistful, wry','Short quatrains about time, wine, and the mystery of existence. Famous for its tender fatalism.'],
+['Poems of Li Qingzhao','Li Qingzhao','c. 1130','EA','p','h,l,w','intimate, mournful, luminous','A Song-dynasty poet writes of love, widowhood, and displacement with startling directness.'],
+['Hojoki (An Account of My Hut)','Kamo no Chomei','1212','EA','z','n,t,w','calm, reflective, impermanent','A hermit, after disasters, learns to live small and lightly in a ten-foot hut.'],
+['Poems of Rumi','Jalal ad-Din Rumi','c. 1260','ME','p','h,l,w','ecstatic, tender, searching','Poems of longing and loss that insist the wound is where the light enters.'],
+['Essays in Idleness','Yoshida Kenko','c. 1330','EA','z','n,t','wry, reflective, gentle','Short essays on impermanence, friendship, and the beauty of imperfect things.'],
+['The Divine Comedy','Dante Alighieri','1320','EU','e','w,g','epic, searching, visionary','A man lost in a dark wood walks through hell and finally toward light.'],
+['Canzoniere','Francesco Petrarch','c. 1374','EU','p','h,l','longing, lyrical, melancholic','Hundreds of sonnets to a woman he could never have.'],
+['The Divan of Hafez','Hafez','c. 1370','ME','p','h,l,t','lyrical, tender, playful','Persian ghazals of love, wine, and heartbreak, still read for comfort across the world.'],
+['Don Quixote','Miguel de Cervantes','1605','EU','L','t,l,n','comic, tender, humane','A man who reads too many books sets out to revive chivalry. Funny at first, then deeply moving.'],
+['Sonnets','William Shakespeare','1609','EU','p','h,l,t','intimate, aching, lyrical','Love, time, jealousy, and the fear of fading, compressed into fourteen lines at a time.'],
+['The Narrow Road to the Deep North','Matsuo Basho','1702','EA','m','l,t,n','spare, contemplative, haiku','A poet walks through northern Japan and turns every landscape into a quiet lesson.'],
+['Dream of the Red Chamber','Cao Xueqin','c. 1760','EA','L','h,w,l','sweeping, tragic, tender','A noble family’s rise and fall, and a love that cannot survive its world.'],
+['Persuasion','Jane Austen','1817','EU','r','h,t,l','tender, mature, hopeful','A woman gets a second chance at the love she gave up. Austen at her most gentle.'],
+['Frankenstein','Mary Shelley','1818','EU','r','l,g,w','intense, tragic, humane','A creature made without love asks for companionship. A book about loneliness and responsibility.'],
+['Ode to a Nightingale','John Keats','1819','EU','p','w,t,n','lyrical, aching, dreamy','A poet longs to escape pain into a bird’s song and finds he cannot stay there.'],
+['Canti','Giacomo Leopardi','1831','EU','p','w,n,l','bleak, beautiful, philosophical','Italy’s great poet of sorrow, who finds a strange dignity in despair.'],
+['Florante at Laura','Francisco Balagtas','1838','SE','e','h,w,t','lyrical, tragic, hopeful','A Filipino verse romance about a prince in chains, a lost love, and a rescue.'],
+['Diwan-e-Ghalib','Mirza Ghalib','1841','SA','p','h,l,n','witty, aching, philosophical','Urdu ghazals of heartbreak and doubt, quoted for generations.'],
+['A Christmas Carol','Charles Dickens','1843','EU','n','g,l,t','warm, moral, hopeful','A lonely, hard man is shown his own life and gets to change it.'],
+['The Raven','Edgar Allan Poe','1845','AM','p','h,w,g','dark, haunting, musical','A man mourning Lenore is visited by a bird that answers every question with "Nevermore".'],
+['Jane Eyre','Charlotte Bronte','1847','EU','L','l,h,t','passionate, resilient, hopeful','An orphan insists on being treated as an equal and finds a home on her own terms.'],
+['Wuthering Heights','Emily Bronte','1847','EU','L','h,w,g','dark, intense, stormy','A love so consuming it destroys the people it touches.'],
+['The Scarlet Letter','Nathaniel Hawthorne','1850','AM','r','g,l,w','somber, moral, searching','A woman is marked for shame, and the book asks who really carries guilt.'],
+['Bartleby, the Scrivener','Herman Melville','1853','AM','s','n,l,w','quiet, uncanny, humane','"I would prefer not to." A clerk quietly withdraws from life while everyone watches.'],
+['Walden','Henry David Thoreau','1854','AM','z','t,n,l','calm, reflective, simple','Two years in a cabin by a pond, and a case for slowing down.'],
+['Song of Myself','Walt Whitman','1855','AM','p','t,l','expansive, warm, consoling','A long poem that insists on the worth of every ordinary person and moment.'],
+['Madame Bovary','Gustave Flaubert','1857','EU','L','h,g,n','precise, tragic, ironic','A woman starving for romance in a dull provincial life.','Content note: includes a suicide.'],
+['Les Fleurs du mal','Charles Baudelaire','1857','EU','p','n,w,h','dark, sensual, melancholic','Poems of spleen, longing, and beauty found in the city’s darker corners.'],
+['Great Expectations','Charles Dickens','1861','EU','L','g,l,h','tender, moral, bittersweet','An orphan rises in the world and learns what he owes the people he left behind.'],
+['Les Miserables','Victor Hugo','1862','EU','L','g,t,w','epic, humane, redemptive','A man hunted for his past tries to live a good life. A huge book about mercy.'],
+['Poems of Emily Dickinson','Emily Dickinson','1890','AM','p','w,n,l','spare, intense, intimate','Short, strange poems on grief, solitude, and the mind’s odd weather.'],
+['The Happy Prince','Oscar Wilde','1888','EU','s','l,t,h','tender, bittersweet, gentle','A statue and a swallow give away everything they have for people they barely know.'],
+['A Doll’s House','Henrik Ibsen','1879','EU','y','n,l','sharp, intense, liberating','A wife realises her life has been a performance and walks out.'],
+['The Posthumous Memoirs of Bras Cubas','Machado de Assis','1881','AM','r','n,w','wry, ironic, philosophical','A dead man narrates his own life with comic detachment.'],
+['The Necklace','Guy de Maupassant','1884','EU','s','g,n','ironic, sharp, tragic','A borrowed jewel costs a woman a decade of her life, and a final twist.'],
+['Noli Me Tangere','Jose Rizal','1887','SE','L','w,h,g','passionate, tragic, political','A young Filipino returns home and meets love, injustice, and the cost of speaking up.'],
+['Kabuliwala','Rabindranath Tagore','1892','SA','s','l,h,t','tender, humane, gentle','A Kabul fruit seller sees his own daughter in a little girl in Calcutta.'],
+['Dom Casmurro','Machado de Assis','1899','AM','r','h,g,n','sly, haunting, ambiguous','A jealous man retells his marriage and we can’t quite trust him.'],
+['Gitanjali','Rabindranath Tagore','1910','SA','p','t,w,l,g','devotional, calm, consoling','Song-offerings that find peace in loss. Tagore won the Nobel Prize for it.'],
+['Ithaka','C. P. Cavafy','1911','EU','p','n,t,l','calm, wise, reflective','A short poem that says the journey is the point, not arrival.'],
+['Mi Ultimo Adios','Jose Rizal','1896','SE','p','w,t,l','solemn, loving, dignified','A farewell poem written the night before his execution, and a love letter to his country.','Content note: written on the eve of the author’s execution.'],
+['The Dead','James Joyce','1914','EU','s','g,l,h,n','quiet, luminous, melancholic','A party ends, and a husband realises how little he knows of his wife’s heart.'],
+['Kokoro','Natsume Soseki','1914','EA','r','g,l,w','quiet, introspective, sorrowful','A student befriends an older man who carries a hidden guilt.','Content note: includes a suicide.'],
+['Poems of 1912-13','Thomas Hardy','1914','EU','p','h,w,g','mournful, raw, tender','Hardy’s poems after his wife’s death, full of regret for what was unsaid.'],
+['Rashomon','Ryunosuke Akutagawa','1915','EA','s','n,g','sharp, cold, philosophical','A man in a ruined gate decides what he is willing to do to survive.'],
+['The Metamorphosis','Franz Kafka','1915','EU','n','l,n,w','absurd, uneasy, sorrowful','A man wakes up as an insect and his family slowly lets him go.'],
+['A Madman’s Diary','Lu Xun','1918','EA','s','n,w','sharp, uneasy, satirical','China’s first modern short story, narrated by a man who thinks everyone around him is a cannibal.'],
+['The Wild Swans at Coole','W. B. Yeats','1919','EU','p','h,l,t','lyrical, elegiac, wistful','An ageing poet counts the swans and feels the years go by.'],
+['Siddhartha','Hermann Hesse','1922','EU','n','t,n,l','calm, searching, gentle','A man leaves everything to find peace and learns it from a river.'],
+['The Garden Party','Katherine Mansfield','1922','OC','s','g,n,l','delicate, sharp, humane','A girl planning a party meets death next door and doesn’t know what to feel.'],
+['Desolacion','Gabriela Mistral','1922','AM','p','w,h,l','raw, tender, grieving','Chile’s Nobel poet writes of love, loss, and a grief that never entirely leaves.'],
+['The Prophet','Kahlil Gibran','1923','ME','p','t,l,w','gentle, wise, consoling','Prose poems on love, sorrow, work, and death, spoken by a man about to leave.'],
+['Twenty Love Poems and a Song of Despair','Pablo Neruda','1924','AM','p','h,l','sensual, aching, lyrical','A young poet writes of love and its loss with startling beauty.'],
+['The Great Gatsby','F. Scott Fitzgerald','1925','AM','r','h,l,g','lyrical, tragic, wistful','A man builds his life around a dream that has already slipped away.'],
+['The Weary Blues','Langston Hughes','1926','AM','p','l,t,w','musical, tender, resilient','Poems from Harlem about weariness, longing, and dignity.'],
+['Gypsy Ballads','Federico Garcia Lorca','1928','EU','p','h,w','lyrical, dark, passionate','Andalusian ballads of love, fate, and death in moonlit images.'],
+['A Room of One’s Own','Virginia Woolf','1929','EU','z','t,l,n','witty, sharp, liberating','A famous essay on money, space, and the freedom needed to create.'],
+['Letters to a Young Poet','Rainer Maria Rilke','1929','EU','z','l,t,w','tender, wise, consoling','A poet writes to a stranger about solitude, patience, and living the questions.'],
+['All Quiet on the Western Front','Erich Maria Remarque','1929','EU','r','w,g,n','raw, tragic, humane','A young German soldier recounts the front line and what it does to him.','Content note: war violence and death.'],
+['Shooting an Elephant','George Orwell','1936','EU','z','g,n','honest, sharp, uneasy','A colonial officer does something he knows is wrong because the crowd expects it.'],
+['The Eidgah','Munshi Premchand','1933','SA','s','t,l,h','tender, humane, gentle','A poor boy spends his festival coins on tongs so his grandmother won’t burn her hands.'],
+['Border Town','Shen Congwen','1934','EA','r','h,l,t','lyrical, pastoral, gentle','A girl, a ferryman, and two brothers in a quiet river town.'],
+['The Little Prince','Antoine de Saint-Exupery','1943','EU','n','l,t,h','tender, gentle, wistful','A pilot meets a boy from another planet and remembers what matters.'],
+['Love in a Fallen City','Eileen Chang','1943','EA','n','h,l','sharp, ironic, bittersweet','A divorced woman finds love in a city on the brink of war.'],
+['The Plague','Albert Camus','1947','EU','L','t,w,n,l','lucid, humane, steady','A town under quarantine and the doctors who keep going anyway.'],
+['Cry, the Beloved Country','Alan Paton','1948','AF','r','w,g,t','tender, mournful, humane','A Zulu pastor searches Johannesburg for his son, and a country searches for itself.'],
+['Snow Country','Yasunari Kawabata','1948','EA','r','l,h,n','spare, lyrical, wistful','A man visits a hot-spring town and a geisha, and neither can reach the other.'],
+['Zorba the Greek','Nikos Kazantzakis','1946','EU','L','t,n,w','vivid, joyful, philosophical','A bookish man meets a man who lives fully, and tries to learn how.'],
+['The Labyrinth of Solitude','Octavio Paz','1950','AM','z','l,n','reflective, searching, philosophical','Essays on Mexican identity and the loneliness behind the masks.'],
+['The Old Man and the Sea','Ernest Hemingway','1952','AM','n','t,w,n','spare, stoic, humane','An old fisherman, a huge fish, and the dignity of keeping on.'],
+['Waiting for Godot','Samuel Beckett','1953','EU','y','n,t,l','absurd, bleak, tender','Two men wait for someone who never arrives. Funny, strange, and true.'],
+['Pedro Paramo','Juan Rulfo','1955','AM','r','w,n,l','haunting, spare, dreamlike','A man goes to find his father and walks into a town of ghosts.'],
+['Sonny’s Blues','James Baldwin','1957','AM','s','l,g,w','tender, raw, humane','A man comes to understand his brother’s pain through music.'],
+['The Leopard','Giuseppe Tomasi di Lampedusa','1958','EU','r','n,t,g','elegiac, ironic, wistful','An aristocrat watches his world fade and accepts it with grace.'],
+['No One Writes to the Colonel','Gabriel Garcia Marquez','1961','AM','n','t,w,l','quiet, dignified, wry','A poor old colonel waits for a pension that never comes.'],
+['Another Birth','Forough Farrokhzad','1964','ME','p','l,n,h','bold, intimate, aching','A Persian poet writes about solitude and desire with startling honesty.'],
+['Season of Migration to the North','Tayeb Salih','1966','AF','r','l,g,w','haunting, dark, searching','A man returns to his Sudanese village and meets a stranger with a dark past.','Content note: includes violence and suicide.'],
+['A Grain of Wheat','Ngugi wa Thiong’o','1967','AF','r','g,w','searching, moral, intense','On the eve of Kenya’s independence, villagers wrestle with betrayal and guilt.'],
+['One Hundred Years of Solitude','Gabriel Garcia Marquez','1967','AM','L','l,w,n','magical, sweeping, melancholic','A family’s rise and fall across generations in a town called Macondo.'],
+['Too Loud a Solitude','Bohumil Hrabal','1976','EU','n','l,n,t','tender, strange, lyrical','A man who crushes waste paper saves the books he loves from destruction.'],
+['The Hour of the Star','Clarice Lispector','1977','AM','n','l,w','intense, tender, strange','A lonely typist in Rio and the narrator who can’t stop thinking about her.'],
+['So Long a Letter','Mariama Ba','1979','AF','n','h,l,t','tender, honest, quietly strong','A Senegalese widow writes to her friend about grief, betrayal, and endurance.'],
+['This Earth of Mankind','Pramoedya Ananta Toer','1980','SE','L','h,w,t','stirring, tender, political','A young Javanese student falls in love and runs into colonial injustice.'],
+['The Book of Disquiet','Fernando Pessoa','1982','EU','d','n,l,w','introspective, drifting, bleak','Fragments by a clerk in Lisbon about boredom, dreams, and the self.'],
+['Love in the Time of Cholera','Gabriel Garcia Marquez','1985','AM','L','h,t','lyrical, patient, humane','A man waits more than fifty years for the woman he loves.'],
+['Norwegian Wood','Haruki Murakami','1987','EA','r','h,w,l','quiet, wistful, aching','A man looks back on a time of love, loss, and growing up in 1960s Tokyo.','Content note: includes suicides.'],
+['Nervous Conditions','Tsitsi Dangarembga','1988','AF','r','l,w,t','sharp, searching, humane','A Zimbabwean girl fights to get an education and a self of her own.'],
+['View with a Grain of Sand','Wislawa Szymborska','1995','EU','p','n,l,t','wry, gentle, wise','Short, clear poems by a Polish Nobel laureate about small things and big questions.']
+];
+WORLD.forEach(([title,author,year,region,form,moods,tone,why,caution])=>{
+  const first=moods.split(',')[0];
+  const book={title,author,year,region,label:LAB[first],why,quote:`From ${REGNAME[region]}.`,meta:`${FORM[form]} · ${tone}`,symbol:SYM[[...title].reduce((a,c)=>a+c.charCodeAt(0),0)%SYM.length],note:NOTES[form]+(caution?' '+caution:''),caution:caution||'',heavy:!!caution};
+  moods.split(',').forEach(m=>books[KEY[m]].push(book));
+});
+
+// ---- Batch 2: more regions, poems, essays ----
+const WORLD2=[
+['Things Fall Apart','Chinua Achebe','1958','AF','r','w,g,l','powerful, tragic, humane','A proud Igbo leader’s world is upended as colonial rule arrives.','Content note: includes a suicide.'],
+['Weep Not, Child','Ngugi wa Thiong’o','1964','AF','r','h,w,t','tender, hopeful, sorrowful','A Kenyan boy’s dream of schooling meets war and loss.'],
+['The Joys of Motherhood','Buchi Emecheta','1979','AF','r','w,t,h','bittersweet, honest, humane','A Nigerian woman gives everything to her children and wonders what it earned.'],
+['The African Child','Camara Laye','1953','AF','n','t,l,h','tender, nostalgic, gentle','A boyhood in Guinea remembered with love, then left behind.'],
+['Chants d’ombre','Leopold Sedar Senghor','1945','AF','p','h,l,t','lyrical, homesick, tender','Poems of exile and longing for Africa from Senegal’s great poet.'],
+['Ake: The Years of Childhood','Wole Soyinka','1981','AF','m','t,l','warm, vivid, humane','A Nobel laureate remembers growing up in a Yoruba town.'],
+['Sleepwalking Land','Mia Couto','1992','AF','r','w,t,l','magical, searching, tender','Two wanderers cross war-torn Mozambique carrying a dead man’s notebooks.'],
+['The Story of an African Farm','Olive Schreiner','1883','AF','L','l,w,t','earnest, searching, lonely','Young people on a South African farm long for a freer life.'],
+['The Beautyful Ones Are Not Yet Born','Ayi Kwei Armah','1968','AF','r','n,w','bleak, searching, sharp','A clerk in Ghana tries to stay clean in a corrupt world.'],
+['The Famished Road','Ben Okri','1991','AF','L','w,t','magical, searching, vivid','A spirit-child grows up in a Nigerian slum, caught between two worlds.'],
+['Their Eyes Were Watching God','Zora Neale Hurston','1937','AM','r','h,t,l','lyrical, warm, strong','A woman tells the story of her three marriages and her own voice.'],
+['Devdas','Sarat Chandra Chattopadhyay','1917','SA','n','h,w','tragic, aching, romantic','A man loses his childhood love and drinks himself toward ruin.','Content note: alcohol abuse and a tragic end.'],
+['Pather Panchali','Bibhutibhushan Bandyopadhyay','1929','SA','L','t,l,w','tender, lyrical, humane','A poor Bengali village family seen through the eyes of a child.'],
+['Toba Tek Singh','Saadat Hasan Manto','1955','SA','s','w,n','sharp, absurd, heartbreaking','An asylum inmate at the India-Pakistan border on Partition.'],
+['Umrao Jan Ada','Mirza Hadi Ruswa','1899','SA','r','h,l','tender, melancholic, lyrical','A courtesan in Lucknow tells her life of longing and loss.'],
+['Naqsh-e-Faryadi','Faiz Ahmed Faiz','1941','SA','p','h,w,l','lyrical, political, aching','Urdu poems where love and political grief blur into one.'],
+['Poems of Kabir','Kabir','c. 1450','SA','p','t,n,w','plain, wise, consoling','Short, direct poems that cut through pretence and ritual.'],
+['Poems of Mirabai','Mirabai','c. 1550','SA','p','h,l','devotional, longing, tender','A princess’s poems of love for Krishna, written against her family’s wishes.'],
+['The Home and the World','Rabindranath Tagore','1916','SA','r','h,g','searching, intimate, tragic','A wife is torn between her husband and a charismatic revolutionary.'],
+['The Guide','R. K. Narayan','1958','SA','r','t,g','wry, gentle, humane','A tour guide in a small town is mistaken for a holy man.'],
+['Summer in Calcutta','Kamala Das','1965','SA','p','h,l','confessional, bold, aching','Frank poems about love, loneliness, and the body from a major Indian poet.'],
+['Thirukkural','Thiruvalluvar','c. 500','SA','p','t,n','concise, wise, ethical','Tamil couplets on how to live well, still widely quoted today.'],
+['The Tale of Kieu','Nguyen Du','1820','SE','p','w,h','lyrical, tragic, enduring','Vietnam’s national poem about a young woman whose beauty brings suffering.'],
+['The Sorrow of War','Bao Ninh','1990','SE','r','w,g','haunting, fragmented, raw','A Vietnamese soldier cannot stop remembering the war.','Content note: war violence.'],
+['Deru Campur Debu','Chairil Anwar','1949','SE','p','w,l','defiant, restless, intense','Poems by Indonesia’s revolutionary young poet, who died at 26.'],
+['The Woman Who Had Two Navels','Nick Joaquin','1961','SE','L','l,n,g','lush, searching, ironic','A Filipina in Hong Kong tries to understand her past and her country.'],
+['Dekada ’70','Lualhati Bautista','1983','SE','r','w,t','honest, moving, political','A Filipina mother raises sons through martial law.'],
+['America Is in the Heart','Carlos Bulosan','1946','SE','m','l,w,t','raw, moving, humane','A Filipino migrant worker’s hard life in 1930s America.','Content note: racism and violence.'],
+['Letters of a Javanese Princess','Raden Adjeng Kartini','1911','SE','z','l,t,w','intimate, hopeful, bold','A young woman’s letters about education and freedom in colonial Java.'],
+['Have Come, Am Here','Jose Garcia Villa','1942','SE','p','l,n','bold, spare, lyrical','Strange, intense poems by a Filipino modernist.'],
+['Midaq Alley','Naguib Mahfouz','1947','ME','r','l,n,t','vivid, humane, wry','Neighbours’ hopes and failures in a crowded Cairo alley.'],
+['Palace Walk','Naguib Mahfouz','1956','ME','L','h,t,g','rich, humane, familial','A strict Cairo father and the family that hides from him.'],
+['One Thousand and One Nights','Anonymous','c. 900','ME','d','t,l,n','magical, sweeping, playful','A queen survives by telling stories, night after night.'],
+['The Gulistan','Saadi','1259','ME','d','t,n','witty, wise, brief','Persian stories and verses on kindness, power, and humility.'],
+['Mural','Mahmoud Darwish','2000','ME','p','w,l,n','elegiac, searching, lyrical','A Palestinian poet looks at his own death and finds life.'],
+['Broken Wings','Kahlil Gibran','1912','ME','n','h,w','tender, tragic, lyrical','A young man’s first love, and a marriage that cannot be.'],
+['Poems of Rabia al-Adawiyya','Rabia al-Adawiyya','c. 750','ME','p','h,l,t','devotional, simple, burning','Short poems of love for God attributed to an early Sufi saint.'],
+['Luzumiyat','Abu al-Ala al-Maarri','c. 1030','ME','p','n,w','sceptical, bleak, wise','A blind Syrian poet’s dark, honest verses on life and death.'],
+['The Ring of the Dove','Ibn Hazm','c. 1022','ME','z','h,l','witty, tender, reflective','A medieval Andalusian treatise on love and its heartaches.'],
+['Madonna in a Fur Coat','Sabahattin Ali','1943','ME','r','h,l','tender, haunting, wistful','A shy clerk in Berlin meets a woman who changes his life.'],
+['Open Closed Open','Yehuda Amichai','2000','ME','p','t,w,l','tender, plain, humane','An Israeli poet finds ordinary words for war, love, and time.'],
+['Men in the Sun','Ghassan Kanafani','1963','ME','n','w,l','haunting, spare, tragic','Three Palestinian men try to cross a border and find no way.','Content note: deaths.'],
+['Voss','Patrick White','1957','OC','L','l,w','grand, austere, searching','An explorer crosses the Australian desert and loses himself.'],
+['An Angel at My Table','Janet Frame','1984','OC','m','l,w,t','honest, quiet, resilient','A New Zealand writer recounts a hard childhood and a hospital she escaped.','Content note: mental health and institutional care.'],
+['The Drover’s Wife','Henry Lawson','1892','OC','s','l,t,w','spare, tough, tender','A woman alone in the bush guards her children through a long night.'],
+['The Moving Image','Judith Wright','1946','OC','p','l,t','lyrical, reflective, plain','Poems of land, love, and loss from an Australian poet.'],
+['Whale Rider','Witi Ihimaera','1987','OC','n','t,w,l','tender, spiritual, hopeful','A Maori girl fights to be accepted as her people’s future leader.'],
+['Sons for the Return Home','Albert Wendt','1973','OC','r','l,h','tender, aching, honest','A Samoan student in New Zealand and a love that his family rejects.'],
+['No Ordinary Sun','Hone Tuwhare','1964','OC','p','w,t','direct, musical, humane','Poems of nature and conscience by a Maori poet.'],
+['Self-Reliance','Ralph Waldo Emerson','1841','AM','z','t,n','bold, clear, bracing','A famous essay urging you to trust your own mind.'],
+['Narrative of the Life of Frederick Douglass','Frederick Douglass','1845','AM','m','w,t','powerful, plain, courageous','A formerly enslaved man tells how he taught himself to read and escaped.','Content note: slavery and violence.'],
+['The Garden of Forking Paths','Jorge Luis Borges','1941','AM','s','n,l','clever, strange, philosophical','A spy story folded around an infinite labyrinth of time.'],
+['Axolotl','Julio Cortazar','1956','AM','s','n,l,w','uncanny, short, haunting','A man gazes at an aquarium creature and can’t leave.'],
+['Maria','Jorge Isaacs','1867','AM','r','h,w','tender, romantic, melancholic','A Colombian romance of two cousins and an illness that parts them.'],
+['My Antonia','Willa Cather','1918','AM','r','t,l,n','tender, nostalgic, plain','Memories of an immigrant girl on the Nebraska prairie.'],
+['Renascence','Edna St. Vincent Millay','1912','AM','p','w,t','intense, luminous, hopeful','A poem that goes down into despair and climbs back toward the sky.'],
+['The Snow Man','Wallace Stevens','1921','AM','p','n,t','cold, clear, spare','A short poem about seeing winter without adding your own sorrow.'],
+['Songs of Life and Hope','Ruben Dario','1905','AM','p','l,t,n','musical, reflective, searching','Spanish-language poems by the leader of modernismo, turning toward life’s big questions.'],
+['The Black Heralds','Cesar Vallejo','1919','AM','p','w,l','raw, aching, stark','Poems where the blows of life land one by one.'],
+['Poems of Sor Juana','Sor Juana Ines de la Cruz','c. 1690','AM','p','w,n,h','brilliant, tender, searching','A 17th-century Mexican nun’s sonnets on love, reason, and being a woman who thinks.'],
+['One Art','Elizabeth Bishop','1976','AM','p','g,h,l,t','wry, controlled, aching','A villanelle about losing things, until loss becomes personal.'],
+['Poems of Sappho','Sappho','c. 600 BCE','EU','p','h,l','intimate, fragmentary, burning','Fragments of longing and love from ancient Greece.'],
+['Poems of Catullus','Catullus','c. 60 BCE','EU','p','h,w','raw, witty, aching','A Roman poet loves, is betrayed, and loses a brother.'],
+['The Aeneid','Virgil','c. 19 BCE','EU','e','w,g,t','epic, somber, searching','A refugee hero carries his people’s hopes to a new home.','Content note: war violence.'],
+['On the Shortness of Life','Seneca','c. 49','EU','z','t,n,w','clear, bracing, practical','A Stoic essay on not wasting the time you have.'],
+['Enchiridion','Epictetus','c. 125','EU','f','t,n,w','brief, practical, steadying','A short Stoic handbook on focusing on what you can control.'],
+['Confessions','Saint Augustine','c. 400','EU','m','g,w','intimate, searching, spiritual','A restless man tells God the story of his wanderings.'],
+['The Consolation of Philosophy','Boethius','c. 524','EU','f','w,t,g','consoling, philosophical, calm','Written in prison: Philosophy visits a doomed man and comforts him.'],
+['Essays','Michel de Montaigne','1580','EU','z','t,n,l','warm, wise, curious','An early essayist watches his own mind and finds humanity.'],
+['Pensees','Blaise Pascal','1670','EU','f','w,n,l','searching, anxious, brilliant','Fragments on doubt, faith, and the human condition.'],
+['Candide','Voltaire','1759','EU','r','t,n','comic, sharp, humane','A naive young man learns life is not the best of all worlds.'],
+['Book of Songs','Heinrich Heine','1827','EU','p','h,l','lyrical, ironic, aching','Love lyrics with a bitter twist, set to music by Schumann and others.'],
+['In Memoriam A.H.H.','Alfred, Lord Tennyson','1850','EU','p','w,g,l','grieving, searching, lyrical','Seventeen years of mourning a friend, written into a long poem.'],
+['Sonnets from the Portuguese','Elizabeth Barrett Browning','1850','EU','p','h,t','tender, passionate, devoted','Love sonnets from a woman who thought she would never be loved.'],
+['Dover Beach','Matthew Arnold','1867','EU','p','w,n','melancholic, lyrical, haunting','A short poem about faith ebbing like the tide, with love as the only anchor.'],
+['A Shropshire Lad','A. E. Housman','1896','EU','p','h,w,l','spare, elegiac, bittersweet','Short poems of lost youth, love, and early death.'],
+['Poems of Wilfred Owen','Wilfred Owen','1920','EU','p','w,g','raw, angry, humane','Poems from the trenches by a soldier who didn’t live to see them published.','Content note: war violence.'],
+['The Love Song of J. Alfred Prufrock','T. S. Eliot','1915','EU','p','l,n','anxious, ironic, haunting','A timid man cannot ask the question he came to ask.'],
+['The Waste Land','T. S. Eliot','1922','EU','p','n,w,l','fragmented, bleak, searching','A landmark poem of a broken world after the First World War.'],
+['Duino Elegies','Rainer Maria Rilke','1923','EU','p','w,l,n','soaring, grieving, philosophical','Ten long poems on angels, love, and the fragile beauty of being alive.'],
+['Funeral Blues','W. H. Auden','1936','EU','p','w,h','plain, devastating, famous','A short poem that says stop all the clocks and mean it.'],
+['The Whitsun Weddings','Philip Larkin','1964','EU','p','l,n,t','wry, quiet, honest','Poems about ordinary lives, loneliness, and fleeting grace.'],
+['Requiem','Anna Akhmatova','1963','RU','p','w,g','piercing, restrained, solemn','Poems about waiting outside a prison for news of her son during the Terror.','Content note: state terror and grief.'],
+['Tristia','Osip Mandelstam','1922','RU','p','l,w','lyrical, classical, aching','Poems of parting and exile, steeped in ancient Greece and Rome.'],
+['A Cloud in Trousers','Vladimir Mayakovsky','1915','RU','p','h,w,l','explosive, raw, rebellious','A young poet’s furious cry about love and heartbreak.'],
+['A Part of Speech','Joseph Brodsky','1977','RU','p','l,n,t','cool, reflective, exile','Poems by a Russian exile on time, distance, and language.']
+];
+(function(){const have=new Set(Object.values(books).flat().map(b=>b.title));
+WORLD2.forEach(([title,author,year,region,form,moods,tone,why,caution])=>{
+  if(have.has(title))return;have.add(title);
+  const first=moods.split(',')[0];
+  const book={title,author,year,region,label:LAB[first],why,quote:`From ${REGNAME[region]}.`,meta:`${FORM[form]} · ${tone}`,symbol:SYM[[...title].reduce((a,c)=>a+c.charCodeAt(0),0)%SYM.length],note:NOTES[form]+(caution?' '+caution:''),caution:caution||'',heavy:!!caution};
+  moods.split(',').forEach(m=>books[KEY[m]].push(book));
+});})();
+
+// ---- Countries, types, and contemporary batch ----
+const CMAP={Greece:['Homer','Sappho','Sophocles','Cavafy','Kazantzakis'],Italy:['Petrarch','Leopardi','Dante','Lampedusa','Virgil','Catullus','Marcus Aurelius','Boethius'],Spain:['Seneca','Cervantes','Lorca','Ibn Hazm'],France:['Flaubert','Baudelaire','Saint-Exupery','Camus','Montaigne','Pascal','Hugo','Maupassant','Voltaire'],'United Kingdom':['Shakespeare','Austen','Bronte','Dickens','Hardy','Browning','Housman','Auden','Shelley','Woolf','Orwell','Tennyson','Keats','Arnold','Owen','Larkin','Eliot'],Ireland:['Wilde','Joyce','Yeats','Beckett'],Germany:['Heine','Hesse','Remarque'],Austria:['Rilke'],'Czech Republic':['Kafka','Hrabal'],Poland:['Szymborska'],Portugal:['Pessoa'],Norway:['Ibsen'],Turkey:['Epictetus','Sabahattin'],Algeria:['Augustine'],Iraq:['Mesopotamia','Rabia'],Iran:['Rumi','Hafez','Farrokhzad','Khayyam','Saadi'],Egypt:['Mahfouz'],Lebanon:['Gibran'],Syria:['Maarri'],Palestine:['Darwish','Kanafani'],Israel:['Amichai','Hebrew Bible'],Sudan:['Salih'],'Arab world':['Anonymous'],China:['(China)','Li Qingzhao','Cao Xueqin','Shen Congwen','Eileen Chang','Du Fu','Lu Xun','Laozi'],Japan:['Murasaki','Kawabata','Murakami','Basho','Soseki','Chomei','Shonagon','Kenko','Akutagawa'],India:['(India)','Kalidasa','Ghalib','Tagore','Premchand','Chattopadhyay','Ruswa','Mirabai','Kamala Das','Bandyopadhyay','Narayan','Kabir','Thiruvalluvar'],Pakistan:['Faiz','Manto'],Philippines:['Balagtas','Rizal','Joaquin','Bulosan','Garcia Villa','Bautista'],Indonesia:['Pramoedya','Anwar','Kartini'],Vietnam:['Nguyen Du','Bao Ninh'],'United States':['Poe','Fitzgerald','Hurston','Bishop','Hawthorne','Melville','Thoreau','Whitman','Emily Dickinson','Hughes','Baldwin','Cather','Hemingway','Douglass','Millay','Emerson','Wallace Stevens'],Brazil:['Machado','Lispector'],Chile:['Mistral','Neruda'],Colombia:['Marquez','Isaacs'],Mexico:['Sor Juana','Octavio Paz','Rulfo'],Argentina:['Borges','Cortazar'],Peru:['Vallejo'],Nicaragua:['Dario'],Nigeria:['Emecheta','Achebe','Soyinka','Okri'],Guinea:['Laye'],Senegal:['Mariama','Senghor'],Kenya:['Ngugi'],Zimbabwe:['Dangarembga'],Mozambique:['Couto'],'South Africa':['Schreiner','Paton'],Ghana:['Armah'],Australia:['Patrick White','Henry Lawson','Judith Wright'],'New Zealand':['Mansfield','Janet Frame','Ihimaera','Tuwhare'],Samoa:['Wendt']};
+function countryOf(b){if(b.country)return b.country;if(!b.region||b.region==='RU')return 'Russia';for(const c in CMAP)if(CMAP[c].some(f=>b.author.includes(f)))return c;return 'Other';}
+function typeOf(b){if(b.medium==='film')return 'film';const m=(b.meta||'').split('·')[0].toLowerCase();return /poem|verse|epigram|haiku|tanka/.test(m)?'poetry':/play/.test(m)?'drama':/essay|memoir|chronicle|philosoph|travel|wisdom|aphorism/.test(m)?'nonfiction':'fiction';}
+const ALLBOOKS=()=>[...new Map(Object.values(books).flat().map(b=>[b.title,b])).values()];
+// [title, author, year, region, form, moods, tone, why, note, country]
+const WORLD3=[
+['Kitchen','Banana Yoshimoto','1988','EA','r','h,w,l','gentle, tender, quiet','A grieving young woman finds comfort in kitchens and a friend’s warmth.','','Japan'],
+['Convenience Store Woman','Sayaka Murata','2016','EA','n','n,l','wry, strange, honest','A woman who feels at home only in a convenience store resists pressure to be normal.','','Japan'],
+['Sky, Wind, Stars and Poetry','Yun Dong-ju','1948','EA','p','l,g,w','pure, shy, mournful','Korea’s beloved poet of conscience, who died in prison at 27.','','South Korea'],
+['Please Look After Mom','Shin Kyung-sook','2008','EA','r','g,h,w','tender, searching, aching','A family searches Seoul for their missing mother and faces how little they knew her.','','South Korea'],
+['To Live','Yu Hua','1993','EA','r','w,t','plain, humane, enduring','A man survives decades of loss through China’s upheavals.','Content note: many deaths.','China'],
+['Rickshaw Boy','Lao She','1937','EA','r','w,t,l','vivid, humane, bleak','A young rickshaw puller in Beijing dreams of his own cart.','','China'],
+['Fortress Besieged','Qian Zhongshu','1947','EA','r','n,l','witty, ironic, sharp','Marriage and career as a siege that everyone outside wants to enter and everyone inside wants to flee.','','China'],
+['Train to Pakistan','Khushwant Singh','1956','SA','r','w,g','stark, humane, tense','A Punjab village faces Partition and what it asks of ordinary people.','Content note: communal violence.','India'],
+['Ghachar Ghochar','Vivek Shanbhag','2013','SA','n','n,g,w','spare, uneasy, sharp','A family’s sudden wealth quietly changes what they are willing to do.','','India'],
+['The Reluctant Fundamentalist','Mohsin Hamid','2007','SA','n','l,g,n','taut, haunting, ambiguous','A Pakistani man tells his story of America to a stranger over dinner.','','Pakistan'],
+['Persepolis','Marjane Satrapi','2000','ME','m','t,l,w','witty, honest, graphic memoir','A girl grows up through the Iranian revolution, told in black-and-white comics.','','Iran'],
+['The Yacoubian Building','Alaa Al Aswany','2002','ME','L','n,w','vivid, human, ironic','The lives of residents of a Cairo apartment block, from rich to poor.','','Egypt'],
+['Frankenstein in Baghdad','Ahmed Saadawi','2013','ME','r','w,n','dark, absurd, haunting','A scavenger stitches together a body from bomb victims, and it comes alive.','Content note: war violence.','Iraq'],
+['The Museum of Innocence','Orhan Pamuk','2008','ME','L','h,l,n','obsessive, tender, melancholic','A man collects objects from a love that ended long ago.','','Turkey'],
+['The Meursault Investigation','Kamel Daoud','2013','ME','r','g,w,n','sharp, bitter, reflective','The brother of the Arab killed in Camus’s The Stranger finally tells his story.','','Algeria'],
+['Americanah','Chimamanda Ngozi Adichie','2013','AF','L','l,h,t','sharp, warm, honest','A Nigerian woman and her first love, separated across Lagos, London, and the US.','','Nigeria'],
+['Disgrace','J. M. Coetzee','1999','AF','r','g,n','spare, hard, moral','A disgraced professor retreats to his daughter’s farm and faces a violent change.','Content note: sexual violence.','South Africa'],
+['Born a Crime','Trevor Noah','2016','AF','m','t,l,w','funny, tender, honest','A comedian recalls growing up mixed-race under apartheid, and his mother who shaped him.','Content note: family violence.','South Africa'],
+['Like Water for Chocolate','Laura Esquivel','1989','AM','r','h,t','sensual, magical, warm','A forbidden love is cooked into every dish she makes.','','Mexico'],
+['The House of the Spirits','Isabel Allende','1982','AM','L','h,w,t','sweeping, magical, humane','Three generations of women across decades of Chilean politics.','Content note: political violence.','Chile'],
+['The Truce','Mario Benedetti','1960','AM','r','l,h,n','quiet, tender, honest','A lonely widower’s diary of a late, fragile love.','','Uruguay'],
+['The Alchemist','Paulo Coelho','1988','AM','n','t,n,l','simple, hopeful, fable','A shepherd boy travels to find a treasure and finds something else.','','Brazil'],
+['Anne of Green Gables','L. M. Montgomery','1908','AM','r','t,l','warm, lively, hopeful','An orphan girl wins over a family and a village.','','Canada'],
+['The Stone Angel','Margaret Laurence','1964','AM','r','g,w,n','proud, honest, moving','An old woman looks back on a hard, stubborn life.','','Canada'],
+['Station Eleven','Emily St. John Mandel','2014','AM','r','t,w,l','lyrical, hopeful, quiet','After a pandemic, a travelling company performs Shakespeare to remind survivors what art is for.','','Canada'],
+['Gilead','Marilynne Robinson','2004','AM','r','t,g,l','quiet, luminous, tender','An old pastor writes a long letter to his young son.','','United States'],
+['Olive Kitteridge','Elizabeth Strout','2008','AM','d','l,t,n','honest, spare, humane','Linked stories of a prickly teacher in a Maine town.','','United States'],
+['Citizen: An American Lyric','Claudia Rankine','2014','AM','p','w,l,n','raw, precise, urgent','Poems about everyday racism and what it does to a person.','','United States'],
+['When Breath Becomes Air','Paul Kalanithi','2016','AM','m','w,t','clear, humane, brave','A neurosurgeon faces terminal cancer and asks what makes a life worth living.','Content note: terminal illness and death.','United States'],
+['The Remains of the Day','Kazuo Ishiguro','1989','EU','r','g,n,l','restrained, aching, quiet','A butler realises too late what his loyalty cost him.','','United Kingdom'],
+['Rapture','Carol Ann Duffy','2005','EU','p','h,l','intimate, bright, aching','A year of love poems, from first heat to loss.','','United Kingdom'],
+['Do Not Go Gentle into That Good Night','Dylan Thomas','1951','EU','p','w,t','fierce, musical, tender','A son begs his dying father to fight the dark.','','Wales'],
+['Small Things Like These','Claire Keegan','2021','EU','n','t,g,l','spare, quiet, moral','A coal merchant in 1985 Ireland decides to do the small right thing.','','Ireland'],
+['Death of a Naturalist','Seamus Heaney','1966','EU','p','t,l,w','earthy, vivid, tender','Poems of childhood, farm life, and growing up in rural Ireland.','','Ireland'],
+['Out Stealing Horses','Per Petterson','2003','EU','r','l,t,g','quiet, spare, wintry','An old man in the Norwegian woods remembers a summer in 1948.','','Norway'],
+['The Summer Book','Tove Jansson','1972','EU','n','t,l','gentle, clear, tender','A grandmother and her granddaughter spend a summer on a Finnish island.','','Finland'],
+['Independent People','Halldor Laxness','1934','EU','L','w,t,l','stubborn, bleak, epic','An Icelandic sheep farmer fights for independence at any cost.','','Iceland'],
+['The Diary of a Young Girl','Anne Frank','1947','EU','m','w,t,l','clear, brave, human','A teenager’s diary from hiding during the Nazi occupation.','Content note: Holocaust.','Netherlands'],
+['Austerlitz','W. G. Sebald','2001','EU','r','l,n,w','quiet, haunting, meandering','A man slowly recovers the memory of a childhood he was sent away from.','','Germany'],
+['Letter from an Unknown Woman','Stefan Zweig','1922','EU','s','h,l','intense, tender, tragic','A woman writes to the man she has loved all her life, who never knew.','','Austria'],
+['Embers','Sandor Marai','1942','EU','r','g,h,n','taut, elegiac, formal','Two old friends meet after forty years to settle a betrayal.','','Hungary'],
+['Death and the Penguin','Andrey Kurkov','1996','EU','r','n,l','dry, absurd, melancholic','A lonely writer in Kyiv adopts a penguin and writes obituaries for the living.','','Ukraine'],
+['Kobzar','Taras Shevchenko','1840','EU','p','w,l,t','passionate, folk, defiant','Ukraine’s national poet writes of exile, servitude, and hope.','','Ukraine'],
+['Voices from Chernobyl','Svetlana Alexievich','1997','EU','z','w,l','raw, human, documentary','Survivors tell what the disaster took from them.','Content note: death, illness and loss.','Belarus'],
+['The Unbearable Lightness of Being','Milan Kundera','1984','EU','L','l,n,h','philosophical, ironic, tender','Four people in Prague ask whether love and life can be light.','','Czech Republic'],
+['The Bridge on the Drina','Ivo Andric','1945','EU','L','w,t','sweeping, humane, historical','Four centuries of a Bosnian town, seen from its bridge.','','Bosnia and Herzegovina'],
+['Ilustrado','Miguel Syjuco','2010','SE','L','l,g,n','playful, searching, layered','A young Filipino writer hunts for a mentor’s lost manuscript.','','Philippines'],
+['Sightseeing','Rattawut Lapcharoensap','2004','SE','d','l,n','quiet, observant, tender','Stories of ordinary lives on the edges of Thailand’s tourism boom.','','Thailand'],
+['Uncle Vanya','Anton Chekhov','1899','RU','y','t,n,l','quiet, wry, aching','A household stuck in dull lives discovers wasted years, and chooses to carry on.','','Russia'],
+['Three Sisters','Anton Chekhov','1901','RU','y','l,n,t','wistful, tender, ironic','Three sisters dream of Moscow and never go.','','Russia'],
+['The Cherry Orchard','Anton Chekhov','1904','RU','y','n,t,g','bittersweet, wry, elegiac','A family loses its beloved estate because it cannot face change.','','Russia'],
+['Shakuntala','Kalidasa','c. 400','SA','y','h,l','lyrical, tender, romantic','A king forgets the woman he loves, until a ring brings her back.','','India'],
+['Atsumori','Zeami Motokiyo','c. 1400','EA','y','w,g','solemn, spare, haunting','A Noh play where a warrior’s ghost meets the monk who once killed him.','','Japan'],
+['The Post Office','Rabindranath Tagore','1912','SA','y','l,t,w','gentle, tender, wistful','A sick boy longs to see the world beyond his window.','Content note: a dying child.','India'],
+['Blood Wedding','Federico Garcia Lorca','1932','EU','y','h,w','poetic, dark, passionate','A bride flees with her old lover on her wedding day.','Content note: violent deaths.','Spain'],
+['Cyrano de Bergerac','Edmond Rostand','1897','EU','y','h,l,t','witty, romantic, bittersweet','A gifted man who thinks himself too ugly to be loved lends his words to another.','','France'],
+['No Exit','Jean-Paul Sartre','1944','EU','y','n,g','tense, bleak, philosophical','Three strangers locked in a room together discover that hell is other people.','','France'],
+['Mother Courage and Her Children','Bertolt Brecht','1939','EU','y','w,t','tough, bitter, humane','A canteen woman profits from war and loses everything to it.','Content note: war and deaths.','Germany'],
+['The Importance of Being Earnest','Oscar Wilde','1895','EU','y','t,n','sparkling, comic, light','Two men invent fake identities for a very silly romantic mess.','','Ireland'],
+['The Glass Menagerie','Tennessee Williams','1944','AM','y','l,h,g','delicate, wistful, aching','A shy young woman, a restless brother, and a mother who won’t let go.','','United States'],
+['Our Town','Thornton Wilder','1938','AM','y','t,w,l','simple, tender, luminous','A small town’s ordinary days, seen from the other side of death.','','United States'],
+['Fences','August Wilson','1985','AM','y','g,w','powerful, raw, humane','A proud man and the family his anger shapes.','','United States'],
+['El Filibusterismo','Jose Rizal','1891','SE','L','w,g,h','sharp, tragic, political','Rizal’s darker sequel: Simoun returns for revenge, and hope collapses into violence.','','Philippines'],
+['Po-on','F. Sionil Jose','1984','SE','r','w,t','epic, humane, historical','A family flees injustice in 19th-century Ilocos and starts again, the first of the Rosales saga.','','Philippines'],
+['Bayan Ko','Jose Corazon de Jesus','1929','SE','p','w,l,t','passionate, patriotic, lyrical','A poem of love for a country in chains, later a song of protest.','','Philippines']
+];
+(function(){const have=new Set(ALLBOOKS().map(b=>b.title));
+WORLD3.forEach(([title,author,year,region,form,moods,tone,why,caution,country])=>{
+  if(have.has(title))return;have.add(title);
+  const first=moods.split(',')[0];
+  const book={title,author,year,region,country,label:LAB[first],why,quote:`From ${country}.`,meta:`${FORM[form]} · ${tone}`,symbol:SYM[[...title].reduce((a,c)=>a+c.charCodeAt(0),0)%SYM.length],note:NOTES[form]+(caution?' '+caution:''),caution:caution||'',heavy:!!caution};
+  moods.split(',').forEach(m=>books[KEY[m]].push(book));
+});
+const cnt={};ALLBOOKS().forEach(b=>{const c=countryOf(b);cnt[c]=(cnt[c]||0)+1;});
+document.getElementById('countryFilter').innerHTML='<option value="any">Any country</option>'+Object.keys(cnt).sort().map(c=>`<option value="${c}">${c} (${cnt[c]})</option>`).join('');})();
+
+// ---- Old forms: epigrams, haiku, tanka, fables, wisdom, odes, epics ----
+Object.assign(FORM,{E:'Epigrams',H:'Haiku',K:'Tanka',B:'Fables',W:'Wisdom sayings',A:'Aphorisms'});
+Object.assign(NOTES,{E:'Read two or three at a time. The sting or the smile is in the last line.',H:'Read one at a time and let the pause afterward do its work.',K:'Read slowly, a few at a time. Each one is a small scene.',B:'Short enough for a break. The moral is the easy part; the story is the pleasure.',W:'Take one saying a day and carry it with you.',A:'A few at a time, with something warm to drink.'});
+// [title, author, year, region, form, moods, tone, why, note, country]
+const OLD=[
+['Epigrams','Martial','c. 90','EU','E','t,n,l','witty, sharp, humane','Over 1,500 short Roman poems that mock vanity and capture daily life, usually with a twist in the last line.','','Italy'],
+['What Makes a Happy Life (Epigram 10.47)','Martial','c. 95','EU','E','t,n,l','warm, plain, wise','A famous short poem on what makes life happy: a quiet home, good health, honest friends, a clear mind, and no fear of the last day.','','Italy'],
+['The Greek Anthology','Various poets','c. 100 BCE','EU','E','w,h,l','brief, elegiac, tender','Epigrams on love, grief, and gravestones, gathered over centuries in ancient Greece.','','Greece'],
+['Haiku of Basho','Matsuo Basho','c. 1686','EA','H','t,n,l','spare, still, luminous','Three short lines on a pond, a frog, a wandering life: the moment before words.','','Japan'],
+['Haiku of Buson','Yosa Buson','c. 1770','EA','H','l,h,t','painterly, gentle, wistful','Haiku that read like small paintings, with warmth and a trace of longing.','','Japan'],
+['Haiku of Chiyo-ni','Kaga no Chiyo','c. 1750','EA','H','t,l,h','delicate, tender, clear','One of Japan’s great haiku poets, writing about nature and quiet feeling.','','Japan'],
+['The Year of My Life','Kobayashi Issa','1819','EA','H','w,t,l','tender, plain, humane','A haiku poet’s diary of one year, full of love for small creatures and personal loss.','Content note: includes the death of a child.','Japan'],
+['Haiku of Shiki','Masaoka Shiki','c. 1895','EA','H','t,n,l','clear, direct, bright','The poet who modernised haiku, writing plainly about what he saw.','','Japan'],
+['Mountain Tasting','Taneda Santoka','c. 1930','EA','H','n,l,t','wandering, free, spare','A wandering Zen priest’s free-verse haiku and diary entries, written on foot.','','Japan'],
+['Haiku: This Other World','Richard Wright','1998','AM','H','l,w,t','sharp, quiet, observant','Haiku Wright wrote near the end of his life, published after his death.','','United States'],
+['Man’yoshu','Various poets','c. 759','EA','K','h,l,w','ancient, tender, direct','Japan’s oldest poetry anthology: love, grief, journeys, and seasons in thousands of poems.','','Japan'],
+['Kokinshu','Various poets','c. 905','EA','K','h,l,t','refined, lyrical, wistful','The first imperial anthology of Japanese court poetry, full of love and passing seasons.','','Japan'],
+['Hyakunin Isshu','Fujiwara no Teika (compiler)','c. 1235','EA','K','h,l','compact, courtly, aching','One hundred poems by one hundred poets, still the basis of a New Year card game in Japan.','','Japan'],
+['A Handful of Sand','Ishikawa Takuboku','1910','EA','K','l,w,t','plain, wistful, direct','Everyday tanka about poverty, homesickness, and small tendernesses.','','Japan'],
+['Tangled Hair','Yosano Akiko','1901','EA','K','h,l','bold, passionate, daring','A young woman’s tanka about desire and independence that shocked Japan.','','Japan'],
+['Poems of Hwang Jini','Hwang Jini','c. 1550','EA','p','h,l','delicate, bold, lyrical','Korean sijo of love and longing by a legendary gisaeng poet.','','South Korea'],
+['Poems of Li Bai','Li Bai','c. 750','EA','p','l,t,n','moonlit, playful, homesick','Tang-dynasty quatrains about wine, moonlight, and homesickness.','','China'],
+['Poems of Wang Wei','Wang Wei','c. 740','EA','p','t,n,l','quiet, still, painterly','Poems of mountains and silence by a Tang poet and painter.','','China'],
+['Song of Everlasting Sorrow','Bai Juyi','806','EA','p','h,w','sweeping, tender, tragic','A famous long poem about an emperor’s love for his consort and the grief that follows.','','China'],
+['Aesop’s Fables','Aesop','c. 600 BCE','EU','B','t,n','short, wry, wise','Short animal tales with a one-line moral, told for over two thousand years.','','Greece'],
+['The Panchatantra','Vishnu Sharma (attributed)','c. 300','SA','B','t,n','witty, wise, brief','Interlinked animal fables from India meant to teach good judgement.','','India'],
+['Kalila and Dimna','Ibn al-Muqaffa','c. 750','ME','B','t,n','witty, wise, political','An Arabic retelling of the Panchatantra fables for a caliph, full of clever advice.','','Iraq'],
+['Fables','Jean de La Fontaine','1668','EU','B','t,n','witty, graceful, wry','French verse fables that mock vanity and folly with elegance.','','France'],
+['Krylov’s Fables','Ivan Krylov','1809','RU','B','t,n','witty, sharp, folk','Russia’s best-loved fable writer, with lines still quoted every day.','','Russia'],
+['The Analects','Confucius','c. 475 BCE','EA','W','t,n,l','calm, practical, humane','Short conversations on learning, kindness, and living well with others.','','China'],
+['Zhuangzi','Zhuangzi','c. 300 BCE','EA','f','t,n,w','playful, strange, freeing','Funny, dreamy stories that teach you to hold your worries lightly.','','China'],
+['The Dhammapada','Buddha (attributed)','c. 250 BCE','SA','W','t,w,n','plain, calm, consoling','Short verses on the mind, suffering, and finding peace.','','India'],
+['Ecclesiastes','Anonymous (Hebrew Bible)','c. 250 BCE','ME','W','w,n,t','sober, wise, honest','A teacher says most of what people chase is breath, then advises enjoying simple things.','','Israel'],
+['Song of Songs','Anonymous (Hebrew Bible)','c. 300 BCE','ME','p','h,l,t','sensual, tender, lyrical','Ancient love poems between two lovers, full of longing and the seasons.','','Israel'],
+['Pirkei Avot','Various rabbis','c. 200','ME','W','t,n','brief, practical, wise','Short sayings on how to live, from rabbis of the first centuries.','','Israel'],
+['The Havamal','Anonymous (Poetic Edda)','c. 1000','EU','W','t,n,w','blunt, practical, wry','Old Norse advice on friendship, hospitality, and getting through hard times.','','Iceland'],
+['Maxims','Francois de La Rochefoucauld','1665','EU','A','n,w','sharp, brief, clear-eyed','Short, biting observations on pride and self-love, written by a French duke.','','France'],
+['Aphorisms','Georg Christoph Lichtenberg','c. 1770','EU','A','n,t','witty, short, modern','Notebook jottings by a German scientist with a very modern wit.','','Germany'],
+['Odes','Horace','23 BCE','EU','p','t,n,l','elegant, wise, gentle','Roman odes on friendship, wine, and seizing the day.','','Italy'],
+['Tristia','Ovid','c. 10','EU','p','l,w,h','mournful, pleading, elegiac','A Roman poet writes from exile at the edge of the empire, begging to go home.','','Italy'],
+['On the Nature of Things','Lucretius','c. 55 BCE','EU','e','w,n,t','philosophical, calming, lyrical','A Roman poem that tries to ease the fear of death with science and wonder.','','Italy'],
+['Letters from a Stoic','Seneca','c. 65','EU','z','t,w,n','warm, practical, steadying','Letters of advice to a friend on facing fear, grief, and ordinary days.','','Spain'],
+['Works and Days','Hesiod','c. 700 BCE','EU','p','t,n,w','plain, rustic, stern','An old Greek farmer’s poem on honest work, justice, and hardship.','','Greece'],
+['The Poetic Edda','Anonymous','c. 1270','EU','p','w,n','stark, mythic, ancient','Norse poems of gods, heroes, and the end of the world.','','Iceland'],
+['Beowulf','Anonymous','c. 1000','EU','e','w,g','stark, mythic, mournful','An Old English hero fights monsters and meets an end he knows is coming.','Content note: violence.','United Kingdom'],
+['The Kalevala','Elias Lonnrot (compiler)','1835','EU','e','t,n,w','mythic, rhythmic, folk','Finland’s national epic, built from folk songs about magic and music.','','Finland'],
+['The Shahnameh','Ferdowsi','c. 1010','ME','e','w,g','epic, tragic, majestic','Persia’s national epic, including the tragic story of Rostam and Sohrab.','Content note: a father unknowingly kills his son.','Iran'],
+['The Tale of the Heike','Anonymous','c. 1250','EA','e','w,n,g','solemn, tragic, impermanent','Japan’s epic of a great clan’s fall, opening with the sound of a temple bell.','Content note: war violence.','Japan'],
+['The Gossamer Years','Michitsuna no Haha','c. 974','EA','m','h,l,w','intimate, aching, honest','A noblewoman’s diary of a marriage that slowly fades, among the oldest by a woman.','','Japan'],
+['The Sarashina Diary','Daughter of Sugawara no Takasue','c. 1060','EA','m','l,t,h','dreamy, wistful, gentle','A woman looks back on a lifetime of books and longing, from childhood to old age.','','Japan'],
+['The Book of Tea','Okakura Kakuzo','1906','EA','z','t,n,l','calm, gracious, short','A short, graceful essay on tea and beauty. A perfect companion for a café.','','Japan'],
+['In Praise of Shadows','Junichiro Tanizaki','1933','EA','z','n,t,l','quiet, reflective, atmospheric','An essay about shadows, dim light, and the beauty modern life tends to erase.','','Japan'],
+['Six Chapters of a Floating Life','Shen Fu','1809','EA','m','h,t,w','tender, intimate, bittersweet','A scholar’s memoir of his loving marriage and the troubles that broke it.','','China'],
+['Poems of Nezahualcoyotl','Nezahualcoyotl','c. 1450','AM','p','w,n,t','solemn, reflective, ancient','An Aztec king-poet’s songs about how brief life and beauty are.','','Mexico'],
+['Popol Vuh','Maya K’iche’ authors','c. 1550','AM','e','w,n,t','mythic, strange, ancient','The K’iche’ Maya creation story, the hero twins, and the origin of people.','','Guatemala'],
+['The Tale of Sinuhe','Anonymous','c. 1900 BCE','ME','s','l,t,g','vivid, human, old','An Egyptian courtier flees into exile, grows rich, and longs to be buried at home.','','Egypt'],
+['Love Songs of Ancient Egypt','Anonymous','c. 1200 BCE','ME','p','h,l','tender, playful, ancient','Short love poems on papyrus from over three thousand years ago.','','Egypt'],
+['Hymns of Enheduanna','Enheduanna','c. 2300 BCE','ME','p','w,l,t','ancient, devotional, brave','Poems by the first author known by name, a priestess in ancient Sumer.','','Iraq'],
+['Mu’allaqat','Various pre-Islamic poets','c. 500','ME','p','h,l,w','proud, lyrical, desert','Great pre-Islamic Arabic odes, many opening with a lament over an abandoned campsite.','','Saudi Arabia'],
+['Amarushataka','Amaru','c. 650','SA','p','h,l','tender, compact, sensual','One hundred Sanskrit love verses, each a small scene between lovers.','','India']
+];
+(function(){const have=new Set(ALLBOOKS().map(b=>b.title));
+OLD.forEach(([title,author,year,region,form,moods,tone,why,caution,country])=>{
+  if(have.has(title))return;have.add(title);
+  const first=moods.split(',')[0];
+  const book={title,author,year,region,country,label:LAB[first],why,quote:`From ${country}.`,meta:`${FORM[form]} · ${tone}`,symbol:SYM[[...title].reduce((a,c)=>a+c.charCodeAt(0),0)%SYM.length],note:NOTES[form]+(caution?' '+caution:''),caution:caution||'',heavy:!!caution};
+  moods.split(',').forEach(m=>books[KEY[m]].push(book));
+});})();
+
+// ---- Films ----
+FORM.F='Film';NOTES.F='Watch it when you have time to sit with it, ideally without your phone nearby.';
+// [title, director, year, region, 'F', moods, tone, why, note, country]
+const FILMS=[
+['Tokyo Story','Yasujiro Ozu','1953','EA','F','t,l,g','quiet, tender, wistful','An elderly couple visits their busy grown children and finds how far apart they have drifted.','','Japan'],
+['Ikiru','Akira Kurosawa','1952','EA','F','w,t,n,g','humane, moving, hopeful','A dying clerk decides to do one meaningful thing with the time he has left.','Content note: terminal illness.','Japan'],
+['Grave of the Fireflies','Isao Takahata','1988','EA','F','w,g','devastating, tender, raw','Two siblings try to survive the last months of the Second World War.','Content note: war and the deaths of children.','Japan'],
+['Rashomon (film)','Akira Kurosawa','1950','EA','F','n,g','sharp, philosophical, tense','Four people tell four different versions of one crime.','','Japan'],
+['Still Walking','Hirokazu Kore-eda','2008','EA','F','g,l,t','quiet, gentle, aching','A family gathers each year to remember a son who died.','','Japan'],
+['Departures','Yojiro Takita','2008','EA','F','w,t,g','gentle, warm, consoling','A cellist becomes a funeral ritual professional and learns about grief and dignity.','','Japan'],
+['Shoplifters','Hirokazu Kore-eda','2018','EA','F','l,t','tender, humane, quiet','A poor family that steals to get by takes in a child who needs them.','','Japan'],
+['Burning','Lee Chang-dong','2018','EA','F','n,l','slow, uneasy, haunting','A young man’s jealousy grows around a missing woman.','','South Korea'],
+['In the Mood for Love','Wong Kar-wai','2000','EA','F','h,l,n','lush, restrained, aching','Two neighbours discover their spouses are having an affair and grow close.','','Hong Kong'],
+['To Live (film)','Zhang Yimou','1994','EA','F','w,t','humane, enduring, bittersweet','A family endures decades of China’s upheavals together.','Content note: deaths.','China'],
+['Yi Yi','Edward Yang','2000','EA','F','t,l,n','wise, gentle, humane','Three generations of a Taipei family, one year, and many small private griefs.','','Taiwan'],
+['Pather Panchali (film)','Satyajit Ray','1955','SA','F','t,l,w','tender, humane, lyrical','A poor Bengali family and the children who see the world with wonder.','','India'],
+['The Lunchbox','Ritesh Batra','2013','SA','F','l,h,t','gentle, wry, tender','A lunch delivered to the wrong office starts a letter friendship between two lonely people.','','India'],
+['Pyaasa','Guru Dutt','1957','SA','F','l,w,n','poetic, bitter, moving','A poet nobody wants in life is celebrated after his supposed death.','','India'],
+['A Separation','Asghar Farhadi','2011','ME','F','g,n,w','tense, humane, ambiguous','A couple’s separation grows into a dispute with real consequences for everyone.','','Iran'],
+['Children of Heaven','Majid Majidi','1997','ME','F','t,l','tender, simple, warm','A boy loses his sister’s shoes and they secretly share his pair.','','Iran'],
+['Winter Sleep','Nuri Bilge Ceylan','2014','ME','F','n,l,g','slow, talky, searching','A retired actor and his hotel guests argue their way through winter in Anatolia.','','Turkey'],
+['The Cranes Are Flying','Mikhail Kalatozov','1957','RU','F','h,w','passionate, tragic, lyrical','A young woman waits for her fiancé at war and her world falls apart.','','Russia'],
+['Andrei Rublev','Andrei Tarkovsky','1966','RU','F','w,g,n','epic, austere, searching','A medieval icon painter looks for faith amid cruelty and war.','Content note: violence.','Russia'],
+['Solaris','Andrei Tarkovsky','1972','RU','F','g,l,n','slow, haunting, philosophical','A psychologist on a space station meets a copy of his dead wife.','','Russia'],
+['Mirror','Andrei Tarkovsky','1975','RU','F','l,g,t','dreamlike, memory, lyrical','A dying poet’s memories of childhood, his mother, and the century.','','Russia'],
+['The 400 Blows','Francois Truffaut','1959','EU','F','l,t,w','honest, tender, restless','A neglected Parisian boy tries to be heard.','','France'],
+['Portrait of a Lady on Fire','Celine Sciamma','2019','EU','F','h,l','intimate, quiet, burning','A painter and her subject fall in love on a remote island in 18th-century Brittany.','','France'],
+['Three Colors: Blue','Krzysztof Kieslowski','1993','EU','F','w,h,g','still, moving, musical','A woman loses her family and tries to cut herself off from everything.','Content note: a death in a car accident.','France'],
+['The Umbrellas of Cherbourg','Jacques Demy','1964','EU','F','h,t','bright, sung, bittersweet','Two young lovers are parted by war, and everything is sung.','','France'],
+['Bicycle Thieves','Vittorio De Sica','1948','EU','F','w,t,l','humane, plain, aching','A poor father in postwar Rome needs his stolen bicycle to keep his job.','','Italy'],
+['La Strada','Federico Fellini','1954','EU','F','l,h,g','tender, sad, circus','A gentle young woman is sold to a rough travelling strongman.','','Italy'],
+['Cinema Paradiso','Giuseppe Tornatore','1988','EU','F','t,h,g','warm, nostalgic, bittersweet','A film director remembers the projectionist who shaped his childhood.','','Italy'],
+['Wings of Desire','Wim Wenders','1987','EU','F','l,t,n','poetic, gentle, dreamlike','An angel in Berlin falls in love and chooses to become human.','','Germany'],
+['The Lives of Others','Florian Henckel von Donnersmarck','2006','EU','F','g,n','tense, humane, quiet','A secret police officer begins to care about the people he spies on.','','Germany'],
+['Paris, Texas','Wim Wenders','1984','EU','F','l,g,h,w','sparse, desert, tender','A man wanders out of the desert to find his lost son and wife.','','Germany'],
+['Wild Strawberries','Ingmar Bergman','1957','EU','F','g,l,t','reflective, gentle, memory','An old professor takes a road trip and revisits his life.','','Sweden'],
+['The Seventh Seal','Ingmar Bergman','1957','EU','F','w,n','stark, philosophical, dark','A knight plays chess with Death during the plague.','','Sweden'],
+['Babette’s Feast','Gabriel Axel','1987','EU','F','t,g','warm, quiet, gentle','A French refugee cooks one extraordinary dinner for a strict Danish village.','','Denmark'],
+['Brief Encounter','David Lean','1945','EU','F','h,l,g','restrained, tender, aching','Two married strangers meet at a railway station and fall in love.','','United Kingdom'],
+['Kes','Ken Loach','1969','EU','F','l,t,w','plain, humane, moving','A lonely Yorkshire boy finds meaning in training a kestrel.','','United Kingdom'],
+['The Remains of the Day (film)','James Ivory','1993','EU','F','g,n,l','restrained, aching, quiet','A butler realises too late what his loyalty cost him.','','United Kingdom'],
+['Once','John Carney','2007','EU','F','h,l,t','warm, musical, bittersweet','A Dublin busker and a Czech immigrant make music and fall for each other.','','Ireland'],
+['Ida','Pawel Pawlikowski','2013','EU','F','g,w,n','spare, black-and-white, quiet','A young novice discovers her family’s past before taking her vows.','','Poland'],
+['It’s a Wonderful Life','Frank Capra','1946','AM','F','w,t,g','warm, hopeful, classic','A despairing man is shown what the world would be without him.','Content note: includes a suicide attempt.','United States'],
+['Casablanca','Michael Curtiz','1942','AM','F','h,l,g','romantic, wry, bittersweet','A cynical bar owner meets the woman who left him.','','United States'],
+['Lost in Translation','Sofia Coppola','2003','AM','F','l,n','quiet, wry, tender','Two lonely strangers in Tokyo find a brief, deep connection.','','United States'],
+['Her','Spike Jonze','2013','AM','F','l,h,n','gentle, odd, aching','A lonely man falls in love with an AI voice.','','United States'],
+['Eternal Sunshine of the Spotless Mind','Michel Gondry','2004','AM','F','h,n,g','strange, tender, funny','A couple erases each other from memory and then wonders why.','','United States'],
+['Nomadland','Chloe Zhao','2020','AM','F','l,t,n','quiet, open, humane','A widow lives on the road in the American West.','','United States'],
+['Up','Pete Docter','2009','AM','F','w,t,l','tender, funny, moving','An old widower flies his house to South America, and the opening is unforgettable.','','United States'],
+['Roma','Alfonso Cuaron','2018','AM','F','l,t,w','quiet, black-and-white, tender','A year in the life of a domestic worker in 1970s Mexico City.','','Mexico'],
+['Central Station','Walter Salles','1998','AM','F','l,t,g','warm, moving, humane','A cynical letter writer helps a boy search for his father across Brazil.','','Brazil'],
+['Atlantics','Mati Diop','2019','AF','F','h,l,w','haunting, dreamlike, quiet','A Senegalese girl’s lost love returns in a ghostly way.','','Senegal'],
+['Himala','Ishmael Bernal','1982','SE','F','w,n','intense, haunting, searching','A village girl claims to see the Virgin and a town grows around her.','Content note: violence and a tragic end.','Philippines'],
+['Anak','Rory B. Quintos','2000','SE','F','g,h,t','emotional, honest, family','A mother who worked abroad returns to a daughter who cannot forgive her.','','Philippines'],
+['Dekada ’70 (film)','Chito S. Rono','2002','SE','F','w,t','honest, moving, family','A Filipino mother raises her sons through martial law.','','Philippines'],
+['That Thing Called Tadhana','Antoinette Jadaone','2014','SE','F','h,l,t','witty, tender, bittersweet','Two strangers meet at a Rome airport and talk through their heartbreaks.','','Philippines'],
+['Kita Kita','Sigrid Andrea Bernardo','2017','SE','F','h,l','sweet, gentle, bittersweet','A heartbroken Filipina in Sapporo meets a man who becomes her closest friend.','','Philippines'],
+['The Scent of Green Papaya','Tran Anh Hung','1993','SE','F','t,n','quiet, gentle, sensory','A young servant girl grows up in 1950s Saigon.','','Vietnam'],
+['One More Chance','Cathy Garcia-Molina','2007','SE','F','h,l,g','raw, honest, bittersweet','A couple breaks up, and each learns what the other really meant.','','Philippines'],
+['Hello, Love, Goodbye','Cathy Garcia-Molina','2019','SE','F','h,l,t','warm, bittersweet, modern','Two overseas Filipino workers in Hong Kong fall in love while chasing different dreams.','','Philippines'],
+['Maynila: Sa mga Kuko ng Liwanag','Lino Brocka','1975','SE','F','w,l,n','gritty, human, desperate','A young man comes to Manila to find the woman he loves and meets the city’s cruelty.','Content note: poverty and violence.','Philippines'],
+['Ang Babaeng Humayo','Lav Diaz','2016','SE','F','w,g,l','slow, moral, haunting','A woman released from prison after 30 years looks for the man who put her there. Based on Tolstoy.','Content note: very long, slow film.','Philippines']
+];
+(function(){const have=new Set(ALLBOOKS().map(b=>b.title));
+FILMS.forEach(([title,author,year,region,form,moods,tone,why,caution,country])=>{
+  if(have.has(title))return;have.add(title);
+  const first=moods.split(',')[0];
+  const book={title,author,year,region,country,medium:'film',label:LAB[first],why,quote:`A film from ${country}.`,meta:`Film · ${tone}`,symbol:'🎞',note:NOTES.F+(caution?' '+caution:''),caution:caution||'',heavy:!!caution};
+  moods.split(',').forEach(m=>books[KEY[m]].push(book));
+});
+const cnt={};ALLBOOKS().forEach(b=>{const c=countryOf(b);cnt[c]=(cnt[c]||0)+1;});
+document.getElementById('countryFilter').innerHTML='<option value="any">Any country</option>'+Object.keys(cnt).sort().map(c=>`<option value="${c}">${c} (${cnt[c]})</option>`).join('');})();
+
+const moods = [...document.querySelectorAll('.mood')];
+const intensity = document.getElementById('intensity');
+let currentMood = 'heartbreak';
+let lastBook = null;
+const byId = id => document.getElementById(id);
+intensity.addEventListener('input', () => { byId('intensityValue').textContent = intensity.value + ' / 10'; });
+moods.forEach(btn => btn.addEventListener('click', () => { currentMood = btn.dataset.mood; moods.forEach(b => b.setAttribute('aria-pressed', String(b===btn))); }));
+function getBooks() { const all = books[currentMood]; const level = Number(intensity.value); if(level <= 3) return [...all].reverse(); if(level >= 8) return [...all].sort((a,b)=> (a.meta.includes('Long')?1:0)-(b.meta.includes('Long')?1:0)); return all; }
+function render(surprise=false) {
+  let list = getBooks();
+  let chosen = list[0];
+  if (surprise) { const pool = Object.values(books).flat().filter(b=>b.title!==lastBook?.title); chosen = pool[Math.floor(Math.random()*pool.length)]; list = [chosen, ...list.filter(b=>b.title!==chosen.title)]; }
+  else if(lastBook && list.length>1 && chosen.title===lastBook.title) chosen=list[1];
+  lastBook=chosen;
+  const level = Number(intensity.value);
+  byId('matchLabel').textContent = chosen.label;
+  byId('bookTitle').textContent = chosen.title;
+  byId('author').textContent = `${chosen.author} · ${chosen.year}`;
+  byId('why').textContent = chosen.why;
+  byId('quote').textContent = chosen.quote;
+  byId('meta').textContent = chosen.meta;
+  byId('coverTitle').textContent = chosen.title;
+  byId('coverAuthor').textContent = chosen.author;
+  byId('symbol').textContent = chosen.symbol;
+  const colors = {'Crime and Punishment':['#702A32','#251C22'],'The Brothers Karamazov':['#4D4036','#1E1B19'],'Oblomov':['#77734E','#323023'],'White Nights':['#53657A','#202D40'],'Notes from Underground':['#655347','#241E1B'],'The Death of Ivan Ilyich':['#82755D','#332D25'],'The Overcoat':['#526E75','#202E32'],'First Love':['#93665E','#3B2428'],'Demons':['#4E2630','#1E191E'],'The Kreutzer Sonata':['#754A4C','#291C20'],'Resurrection':['#65745A','#273024'],'The Eternal Husband':['#705B48','#2C211D']};
+  const c=colors[chosen.title]||['#722D36','#321C24']; byId('cover').style.background=`linear-gradient(155deg,${c[0]},${c[1]} 78%)`;
+  byId('noteTitle').textContent = level>=8 ? 'A note for the heavier days' : level<=3 ? 'A gentle way in' : 'How to read this one';
+  byId('note').textContent = level>=8 ? chosen.note + ' If this feeling is becoming too much to carry alone, consider telling someone you trust how things really are. Crisis lines are listed at the bottom of this page.' : chosen.note;
+  const alternatives = list.filter(b=>b.title!==chosen.title).slice(0,2);
+  byId('otherPicks').innerHTML = alternatives.map(b=>`<article class="pick"><h3>${b.title}</h3><p><em>${b.author}</em> · ${b.meta.split('·')[0].trim()}<br>${b.why}</p></article>`).join('');
+  const result=byId('result'); result.classList.add('visible'); result.scrollIntoView({behavior:'smooth',block:'start'});
+}
+byId('recommend').addEventListener('click',()=>render(false));
+byId('surprise').addEventListener('click',()=>render(true));
+
+// Layer the richer companion features onto the original experience.
+let selectedMoods = ['heartbreak'];
+let currentRecommendation = null;
+const shelfStorageKey = 'stateOfSadnessSorrowShelfV1';
+const feelingNames = {heartbreak:'Heartbroken',lonely:'Deeply lonely',wrecked:'Soul-wrecked',numb:'Numb & empty',guilty:'Guilty & regretful',tired:'Exhausted by life'};
+function readShelf() { try { const saved = JSON.parse(localStorage.getItem(shelfStorageKey) || '[]'); return Array.isArray(saved) ? saved : []; } catch (_) { return []; } }
+function writeShelf(items) { try { localStorage.setItem(shelfStorageKey, JSON.stringify(items)); } catch (_) { byId('shelfList').innerHTML = '<p class="empty-shelf">Your browser could not save locally. You can still use recommendations during this visit.</p>'; } }
+function paintShelf() {
+  const shelf = readShelf();
+  byId('shelfCount').textContent = `${shelf.length} ${shelf.length===1?'book':'books'} saved`;
+  if (!shelf.length) { byId('shelfList').innerHTML = '<p class="empty-shelf">No books saved yet. When a recommendation speaks to you, keep it here.</p>'; return; }
+  byId('shelfList').innerHTML = shelf.map((entry,index)=>`<article class="shelf-entry"><div class="shelf-entry-top"><div><h3>${entry.title}</h3><p>${entry.author} · Saved for ${entry.moods.map(m=>feelingNames[m]||m).join(', ')} · Intensity ${entry.intensity}/10</p></div><button class="remove-book" type="button" data-remove="${index}" aria-label="Remove ${entry.title} from shelf">Remove</button></div><label for="resonance-${index}">How did it resonate with you? <select id="resonance-${index}" data-rating="${index}"><option value="unrated" ${entry.resonance==='unrated'?'selected':''}>Not read / not rated</option><option value="seen" ${entry.resonance==='seen'?'selected':''}>I felt seen</option><option value="comforted" ${entry.resonance==='comforted'?'selected':''}>It comforted me</option><option value="challenged" ${entry.resonance==='challenged'?'selected':''}>It challenged me</option><option value="too-heavy" ${entry.resonance==='too-heavy'?'selected':''}>Too heavy for me</option><option value="not-fit" ${entry.resonance==='not-fit'?'selected':''}>Not the right fit</option></select></label></article>`).join('');
+  byId('shelfList').querySelectorAll('[data-remove]').forEach(button=>button.addEventListener('click',()=>{const items=readShelf();items.splice(Number(button.dataset.remove),1);writeShelf(items);paintShelf();}));
+  byId('shelfList').querySelectorAll('[data-rating]').forEach(select=>select.addEventListener('change',()=>{const items=readShelf();const item=items[Number(select.dataset.rating)];if(item){item.resonance=select.value;writeShelf(items);}}));
+}
+moods.forEach(button=>button.addEventListener('click',()=>{
+  const mood=button.dataset.mood;
+  if(selectedMoods.includes(mood)){if(selectedMoods.length>1)selectedMoods=selectedMoods.filter(item=>item!==mood);}
+  else if(selectedMoods.length<3)selectedMoods=[...selectedMoods,mood];
+  else {byId('selectionHint').textContent='You can choose up to three feelings. Deselect one to make room.';return;}
+  moods.forEach(item=>item.setAttribute('aria-pressed',String(selectedMoods.includes(item.dataset.mood))));
+  byId('selectionHint').textContent=`${selectedMoods.length} of 3 feelings selected: ${selectedMoods.map(m=>feelingNames[m]).join(' · ')}`;
+}));
+function getPersonalizedBooks() {
+  const all = Object.values(books).flat();
+  const unique = [...new Map(all.map(book=>[book.title,book])).values()];
+  const length = byId('readingLength').value;
+  const depth = byId('emotionalDepth').value;
+  const level = Number(intensity.value);
+  const categoryByTitle = {};
+  Object.entries(books).forEach(([mood,list])=>list.forEach(book=>{(categoryByTitle[book.title] ||= new Set()).add(mood);}));
+  const eligible = length==='short' ? unique.filter(book=>!/Long novel/.test(book.meta)) : length==='long' ? unique.filter(book=>/Long novel/.test(book.meta)) : unique;
+  let scored = eligible.map(book=>{
+    const categories=categoryByTitle[book.title]||new Set();
+    let score=selectedMoods.reduce((sum,mood)=>sum+(categories.has(mood)?5:0),0);
+    const isLong=/Long novel/.test(book.meta);
+    if(length==='short')score+=isLong?-8:3;
+    if(length==='long')score+=isLong?4:-2;
+    if(depth==='gentle')score+=/tender|hopeful|gentle|humane|warmth|compassion/i.test(book.meta+' '+book.why)?4:-1;
+    if(depth==='deep')score+=/philosophical|existential|introspective|psychological|moral|searching/i.test(book.meta+' '+book.why)?5:0;
+    if(depth==='dark')score+=/dark|intense|raw|claustrophobic|feverish|unsettling|devastating/i.test(book.meta+' '+book.why)?5:-1;
+    if(level<=3)score+=/tender|hopeful|gentle|bittersweet|warmth/i.test(book.meta+' '+book.why)?3:0;
+    if(level>=8)score+=/intense|dark|existential|devastating|psychologically|unsparing/i.test(book.meta+' '+book.why)?3:0;
+    return {book,score};
+  }).sort((a,b)=>b.score-a.score).map(item=>item.book);
+  if(!scored.length)scored=unique;
+  return scored;
+}
+render = function(surprise=false) {
+  const eraSel=byId('eraFilter').value,regSel=byId('regionFilter').value,ctrySel=byId('countryFilter').value,typeSel=byId('typeFilter').value,orderSel=byId('orderFilter').value;
+  const passes=book=>(eraSel==='any'||genEra(yearNum(book))===eraSel)&&(regSel==='any'||(book.region||'RU')===regSel)&&(ctrySel==='any'||countryOf(book)===ctrySel)&&(typeSel==='any'||(typeSel==='books'?typeOf(book)!=='film':typeOf(book)===typeSel));
+  const heavyOk=book=>!(book.heavy&&Number(intensity.value)>=8);
+  const filtersOn=eraSel!=='any'||regSel!=='any'||ctrySel!=='any'||typeSel!=='any';
+  let list=filtersOn?ALLBOOKS().filter(heavyOk).filter(passes):getPersonalizedBooks().filter(heavyOk).filter(passes);
+  if(filtersOn&&orderSel==='best'){const mset=new Set(selectedMoods.flatMap(m=>books[m]||[]));list=[...list].sort((a,b)=>(mset.has(b)?1:0)-(mset.has(a)?1:0));}
+  if(!list.length)list=ALLBOOKS().filter(heavyOk).filter(passes);
+  if(!list.length)list=ALLBOOKS().filter(passes);
+  if(!list.length)list=getPersonalizedBooks();
+  if(orderSel==='oldest')list=[...list].sort((a,b)=>yearNum(a)-yearNum(b));
+  if(orderSel==='newest')list=[...list].sort((a,b)=>yearNum(b)-yearNum(a));
+  if(surprise&&orderSel==='best')list=[...list].sort(()=>Math.random()-.5);
+  const wasForced=!!forcedBook;let chosen=forcedBook||(orderSel!=='best'?list[(list.findIndex(book=>book.title===currentRecommendation?.title)+1)%list.length]:list.find(book=>book.title!==currentRecommendation?.title))||list[0];forcedBook=null;
+  currentRecommendation=chosen;lastBook=chosen;
+  const level=Number(intensity.value);
+  byId('matchLabel').textContent=`${chosen.label} · ${wasForced?'today’s pick':'matched to '+selectedMoods.map(m=>feelingNames[m]).join(' + ')}`;
+  byId('bookTitle').textContent=chosen.title;byId('author').textContent=`${chosen.author} · ${chosen.year} · ${countryOf(chosen)}`;byId('why').textContent=chosen.why;byId('quote').textContent=chosen.quote;byId('meta').textContent=chosen.meta;byId('coverTitle').textContent=chosen.title;byId('coverAuthor').textContent=chosen.author;byId('symbol').textContent=chosen.symbol;
+  const colors={'Crime and Punishment':['#702A32','#251C22'],'The Brothers Karamazov':['#4D4036','#1E1B19'],'Oblomov':['#77734E','#323023'],'White Nights':['#53657A','#202D40'],'Notes from Underground':['#655347','#241E1B'],'The Death of Ivan Ilyich':['#82755D','#332D25'],'The Overcoat':['#526E75','#202E32'],'First Love':['#93665E','#3B2428'],'Demons':['#4E2630','#1E191E'],'The Kreutzer Sonata':['#754A4C','#291C20'],'Resurrection':['#65745A','#273024'],'The Eternal Husband':['#705B48','#2C211D']};
+  const color=({...colors,...extraColors})[chosen.title]||hashColor(chosen.title);byId('cover').style.background=`linear-gradient(155deg,${color[0]},${color[1]} 78%)`;
+  byId('noteTitle').textContent=level>=8?'A note for the heavier days':level<=3?'A gentle way in':'How to read this one';byId('note').textContent=chosen.note+(chosen.caution?' '+chosen.caution:'')+(level>=8?' If this feeling is becoming too much to carry alone, consider telling someone you trust how things really are. Crisis lines are listed at the bottom of this page.':'');
+  const alternatives=list.filter(book=>book.title!==chosen.title).slice(0,2);byId('otherPicks').innerHTML=alternatives.map(book=>`<article class="pick"><h3>${book.title}</h3><p><em>${book.author}</em> · ${book.meta.split('·')[0].trim()}<br>${book.why}</p></article>`).join('');
+  byId('saveBook').textContent=readShelf().some(item=>item.title===chosen.title)?'✓ Saved to My Sorrow Shelf':'♡ Save to My Sorrow Shelf';
+  byId('result').classList.add('visible');byId('result').scrollIntoView({behavior:'smooth',block:'start'});
+};
+byId('saveBook').addEventListener('click',()=>{
+  if(!currentRecommendation){render(false);}
+  const book=currentRecommendation;if(!book)return;
+  const shelf=readShelf();if(shelf.some(item=>item.title===book.title)){byId('saveBook').textContent='✓ Already on your shelf';return;}
+  shelf.unshift({title:book.title,author:book.author,moods:[...selectedMoods],intensity:Number(intensity.value),resonance:'unrated'});writeShelf(shelf);paintShelf();byId('saveBook').textContent='✓ Saved to My Sorrow Shelf';
+});
+paintShelf();
+// ---- Shop links: put your affiliate tag below (leave empty for plain links) ----
+const SHOP={amazonTag:'',tipUrl:'https://ko-fi.com/oldbooksnewworld'};
+// Add direct video links here: 'Book Title':'https://www.youtube.com/watch?v=...'
+const VIDEOS={};
+function updateFindLink(){const b=currentRecommendation;if(!b)return;const q=encodeURIComponent(b.title+' '+b.author);byId('findBook').href=SHOP.amazonTag?`https://www.amazon.com/s?k=${q}&tag=${encodeURIComponent(SHOP.amazonTag)}`:`https://bookshop.org/search?keywords=${q}`;byId('affNote').style.display=SHOP.amazonTag?'block':'none';const v=VIDEOS[b.title];byId('watchBook').href=v||'https://www.youtube.com/@OldbooksNewworld/search?query='+q;byId('watchBook').textContent=v?'Watch my video ▶':'Search my channel ▶';}
+const _render=render;render=function(s){_render(s);updateFindLink();};
+const _ufl=updateFindLink;updateFindLink=function(){_ufl();const b=currentRecommendation;if(b&&b.medium==='film'){const q=encodeURIComponent(b.title.replace(' (film)','')+' '+b.year);byId('findBook').href='https://www.justwatch.com/ph/search?q='+q;byId('findBook').textContent='Where to watch ↗';byId('affNote').style.display='none';}else{byId('findBook').textContent='Find this book ↗';}};
+var forcedBook=null;
+const NEWS_URL='';
+const SITE_URL=location.href.split('#')[0];
+const _ufl2=updateFindLink;updateFindLink=function(){_ufl2();const b=currentRecommendation;if(!b)return;const f=byId('freeBook');const free=b.medium!=='film'&&yearNum(b)<=1928;f.style.display=free?'inline-flex':'none';if(free){const last=/[()]/.test(b.author)?'':' '+b.author.split(' ').pop();f.href='https://www.gutenberg.org/ebooks/search/?query='+encodeURIComponent(b.title+last);}};
+byId('shareBook').onclick=async()=>{const b=currentRecommendation;if(!b)return;const kind=b.medium==='film'?'film':'book';const by=b.medium==='film'?'directed by':'by';const text=`For my sad day, State of Sadness gave me the ${kind} “${b.title.replace(' (film)','')}” ${by} ${b.author} (${countryOf(b)}, ${b.year}). Find yours:`;try{if(navigator.share){await navigator.share({title:'State of Sadness',text,url:SITE_URL});return;}}catch(e){if(e&&e.name==='AbortError')return;}const full=text+' '+SITE_URL;let ok=false;try{await navigator.clipboard.writeText(full);ok=true;}catch(e){try{const t=document.createElement('textarea');t.value=full;document.body.appendChild(t);t.select();ok=document.execCommand('copy');t.remove();}catch(e2){}}const btn=byId('shareBook');btn.textContent=ok?'Copied! Paste it anywhere ✓':'Copy this: '+full;setTimeout(()=>{btn.textContent='Share this pick ↗';},ok?2500:9000);};
+(function(){const pool=ALLBOOKS().filter(b=>!b.heavy);const d=new Date();const n=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);const b=pool[(n*7919)%pool.length];byId('dailyTitle').textContent=b.title.replace(' (film)','');byId('dailyText').textContent=`${b.author} · ${b.year} · ${countryOf(b)}. ${b.why}`;byId('dailyBtn').onclick=()=>{forcedBook=b;render(false);};if(NEWS_URL){byId('newsLink').href=NEWS_URL;byId('newsBox').style.display='block';}})();
+const HELP={
+'Argentina':['911',['Centro de Asistencia al Suicida (Buenos Aires area)','135'],['Centro de Asistencia al Suicida (rest of country)','5275-1135']],
+'Australia':['000',['Lifeline (24/7)','13 11 14'],['Suicide Call Back Service','1300 659 467'],['Kids Helpline (ages 5–25)','1800 55 1800']],
+'Austria':['112',['Telefonseelsorge (24/7)','142'],['Rat auf Draht (children and teens)','147']],
+'Bangladesh':['999',['Kaan Pete Roi','+88 09612 119911'],['Vent by Mindspace','+8809-678-678-778']],
+'Belgium':['112',['Zelfmoordlijn (Dutch, 24/7)','1813'],['Centre de Prévention du Suicide (French, 24/7)','0800 32 123']],
+'Brazil':['190 (police) / 192 (ambulance)',['CVV (24/7)','188']],
+'Canada':['911',['988 Suicide Crisis Helpline (call or text, 24/7)','988'],['Talk Suicide Canada','1-833-456-4566'],['Crisis Text Line','Text HOME to 686868']],
+'Chile':['',['Suicide prevention line','*4141'],['Salud Responde','600 360 7777']],
+'China':['110 (police) / 120 (ambulance)',['National mental health hotline','12356'],['Beijing Suicide Research and Prevention Center (24/7)','010-8295-1332']],
+'Colombia':['123',['Línea 106 (mental health support)','106']],
+'Denmark':['112',['Livslinien (11am–4am)','70 201 201']],
+'Egypt':['122 (police) / 123 (health) / 124 (fire)',['Befrienders Cairo','762 1602'],['Befrienders Cairo','762 1603']],
+'Finland':['112',['MIELI crisis helpline (Finnish, 24/7)','09 2525 0111'],['MIELI (Arabic and English)','09 2525 0113']],
+'France':['112 (ambulance: 15)',['3114 national suicide prevention line (24/7)','3114'],['Fil Santé Jeunes (young people)','0800 235 236']],
+'Germany':['112 (police: 110)',['Telefonseelsorge (24/7, free)','0800 111 0 111'],['Telefonseelsorge','116 123']],
+'Greece':['112',['Suicide help line','1018']],
+'Hong Kong':['999',['The Samaritans (24/7)','2896 0000'],['Samaritan Befrienders','2389 2222'],['Suicide Prevention Services (24/7)','2382 0000']],
+'India':['112',['Tele-MANAS (government, 24/7)','14416'],['Vandrevala Foundation (24/7)','+91 9999666555'],['AASRA (24/7)','+91-22-27546669']],
+'Indonesia':['119',['Ministry of Health hotline','1500-567']],
+'Ireland':['112 or 999',['Samaritans (24/7)','116 123'],['Text support','Text HELLO to 50808']],
+'Israel':['100 (police) / 101 (ambulance)',['ERAN (24/7)','1201']],
+'Italy':['112',['Telefono Amico (10am–12am)','199 284 284'],['Telefono Amico Cevita (24/7)','0299777'],['Samaritans Onlus','800 86 00 22']],
+'Japan':['110 (police) / 119 (ambulance)',['Yorisoi Hotline (24h, Japanese)','0120-279-338'],['TELL Lifeline (English)','03-5774-0992']],
+'Kenya':['999 or 112',['Befrienders Kenya','+254 722 178 177']],
+'Malaysia':['999',['Talian Kasih','15999'],['Befrienders Kuala Lumpur','03-7956 8144']],
+'Mexico':['911',['Línea de la Vida','800 822 3737'],['SAPTEL (24/7)','(55) 5259-8121']],
+'Netherlands':['112',['113 Zelfmoordpreventie (24/7)','113'],['113 (free number)','0800 0113']],
+'New Zealand':['111',['1737 (call or text, 24/7)','1737'],['Lifeline Aotearoa (24/7)','0800 543 354'],['Youthline','0800 376 633']],
+'Norway':['112 (ambulance: 113)',['Mental Helse (24/7)','116 123'],['Kirkens SOS (24/7)','22 40 00 40']],
+'Pakistan':['15 / 115 / 1122',['Umang (24/7)','0311 7786264']],
+'Philippines':['911',['NCMH Crisis Hotline (24/7)','1553'],['NCMH (Globe/TM)','0917 899 8727'],['NCMH (Smart/TNT)','0919 057 1553'],['Hopeline PH','(02) 8804-4673'],['Hopeline PH (mobile)','0917 558 4673'],['In Touch Crisis Line','(02) 8893 7603']],
+'Poland':['112',['Crisis line for adults (14:00–22:00)','116 123'],['ITAKA (24/7)','800 70 2222'],['Children and teens (24/7)','116 111']],
+'Portugal':['112',['SOS Voz Amiga (4pm–12am)','213 544 545'],['Voz de Apoio','225 50 60 70']],
+'Russia':['112',['EMERCOM psychological service','+7 (495) 989-50-50'],['Moscow emergency line (24h)','051']],
+'Singapore':['999 (police) / 995 (ambulance)',['Samaritans of Singapore (24/7)','1767'],['National Mindline','1771']],
+'South Africa':['10111 (police) / 10177 (ambulance)',['SADAG suicide crisis line','0800 567 567'],['SMS','SMS 31393']],
+'South Korea':['112 (police) / 119 (ambulance)',['Suicide prevention line','109'],['Lifeline Korea','1588-9191'],['Mental health crisis counselling (24h)','1577-0199']],
+'Spain':['112',['Línea 024 (free, 24/7)','024'],['Teléfono de la Esperanza (24/7)','717 003 717']],
+'Sweden':['112',['Självmordslinjen (24/7)','90101'],['BRIS (under 18)','116 111']],
+'Switzerland':['144 (ambulance)',['Die Dargebotene Hand','143'],['Pro Juventute (under 18)','147']],
+'Taiwan':['119',['Suicide prevention line','1925'],['Lifeline','1995']],
+'Thailand':['191 (police) / 1669 (medical)',['Mental Health Hotline','1323']],
+'Turkey':['112'],
+'Ukraine':['',['Lifeline','7333']],
+'United Arab Emirates':['112 or 999',['National mental health support line','920033360']],
+'United Kingdom':['999 or 112',['Samaritans (24/7)','116 123'],['Shout (text, 24/7)','Text SHOUT to 85258'],['CALM (5pm–midnight)','0800 58 58 58'],['NHS mental health crisis (where available)','111, option 2']],
+'United States':['911',['988 Suicide & Crisis Lifeline (call or text, 24/7)','988'],['Crisis Text Line','Text HOME to 741741'],['The Trevor Project (LGBTQ+ youth)','1-866-488-7386']],
+'Uruguay':['911',['Suicide prevention line (24h)','0800 0767']]
+};
+(function(){const sel=byId('helpCountry'),body=byId('helpBody');sel.innerHTML='<option value="">Select a country…</option>'+Object.keys(HELP).sort().map(c=>`<option>${c}</option>`).join('')+'<option value="other">My country isn’t listed</option>';
+const tel=d=>/^[+*(\d][\d\s\-()]*$/.test(d)?'tel:'+d.replace(/[^\d+*]/g,''):null;
+function show(){const c=sel.value;try{localStorage.setItem('helpCountry',c);}catch(e){}
+if(!c){body.innerHTML='In immediate danger? Call your local emergency number.';return;}
+if(c==='other'){body.innerHTML='In immediate danger, call your local emergency number. Find a helpline for your country at <a href="https://findahelpline.com" target="_blank" rel="noopener">findahelpline.com</a> or <a href="https://www.iasp.info/crisis-centres-helplines/" target="_blank" rel="noopener">iasp.info</a>.';return;}
+const [em,...lines]=HELP[c];
+body.innerHTML=(em?`<strong>Emergency:</strong> ${em}<br>`:'<strong>In immediate danger:</strong> call your local emergency number.<br>')+lines.map(([l,d])=>{const t=tel(d);return `<strong>${l}:</strong> ${t?`<a href="${t}">${d}</a>`:d}`;}).join('<br>');}
+sel.onchange=show;try{const saved=localStorage.getItem('helpCountry');if(saved&&(saved==='other'||HELP[saved]))sel.value=saved;}catch(e){}show();})();
+const _ufl3=updateFindLink;updateFindLink=function(){_ufl3();const b=currentRecommendation;if(!b)return;const film=b.medium==='film';
+const clean=t=>t.replace(/ \(.*?\)$/,'');const coll=/^(Poems|Haiku|Tanka|Epigrams|Wisdom|Aphorisms|Fables)/.test(b.meta||'');
+const surname=/[()]|Various|Anonymous/.test(b.author)?'':b.author.split(' ').pop();
+const q=encodeURIComponent(coll&&surname?b.author:(clean(b.title)+(surname?' '+surname:'')));
+byId('freeBook').style.display='none';
+const am=byId('amazonBook');am.style.display=film?'none':'inline-flex';
+am.href='https://www.amazon.com/s?k='+q+'&i=stripbooks'+(SHOP.amazonTag?'&tag='+encodeURIComponent(SHOP.amazonTag):'');
+if(!film){byId('findBook').href='https://bookshop.org/search?keywords='+q;byId('findBook').textContent='Bookshop.org ↗';}
+byId('affNote').style.display=(SHOP.amazonTag&&!film)?'block':'none';
+const fb=byId('freeBox');fb.style.display=film?'none':'block';if(film)return;
+const old=yearNum(b)<=1928;
+const links=old?[['Project Gutenberg','https://www.gutenberg.org/ebooks/search/?query='+q],['Standard Ebooks','https://standardebooks.org/ebooks?query='+q],['Wikisource','https://en.wikisource.org/w/index.php?search='+q],['Internet Archive','https://archive.org/search?query='+q],['LibriVox (audio)','https://librivox.org/search?q='+q+'&search_form=get_results']]:[['Open Library (borrow)','https://openlibrary.org/search?q='+q],['Internet Archive (borrow)','https://archive.org/search?query='+q],['Libby (your public library)','https://libbyapp.com']];
+byId('freeSummary').textContent=old?'Read or listen free':'Borrow free or from a library';
+byId('freeLinks').innerHTML=links.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener">${n} ↗</a>`).join(' · ');};
+if(SHOP.tipUrl){byId('tipLink').href=SHOP.tipUrl;byId('tipBox').style.display='block';}
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
+</html>
